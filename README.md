@@ -1,7 +1,7 @@
 [README (7).md](https://github.com/user-attachments/files/29837623/README.7.md)
 # AIML_Project_Hub
 Collection of all class project repositories
-# 🎓 Class Projects Hub — AI$ML/Btech
+# 🎓 Class Projects Hub — AI&ML/Btech
 
 >  This repository lists the projects of all the students/classes in our class. Each project is located in its leader's GitHub repository. Here only links and short descriptions are provided for easy tracking.
 

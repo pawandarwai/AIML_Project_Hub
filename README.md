@@ -1,20 +1,19 @@
 [README (7).md](https://github.com/user-attachments/files/29837623/README.7.md)
 # AIML_Project_Hub
 Collection of all class project repositories
-# 🎓 Class Projects Hub — [Subject/Course Name]
+# 🎓 Class Projects Hub — AI$ML/Btech
 
-> Is repository me hamari class ke sabhi students/teams ke projects ki list hai. Har project apne leader ke GitHub repository me hai — yaha sirf links aur short description di gayi hai easy tracking ke liye.
+>  This repository lists the projects of all the students/classes in our class. Each project is located in its leader's GitHub repository. Here only links and short descriptions are provided for easy tracking.
 
-**Course/Subject:** [Yaha subject ka naam likho]
-**Mentor/Faculty:** Hod Mam
-**Semester/Batch:** [Yaha batch/semester likho]
+**Course/Subject:** Artificial Intelligence and Machine Learning
+**Mentor/Faculty:** Priyanka Bhatele HOD Mam
+**Semester/Batch:** 4 th/ 2nd Year
 
 ---
 
 ## 📌 About
 
-Ye repo Hod Mam dwara diye gaye project assignment ke tahat banaya gaya hai, taaki sabhi students ke projects ek jagah track kiye ja sakein.
-
+This repository is created based on the project assignments given by Hod Han, so that all student projects can be tracked in one place.
 ---
 
 ## 🚀 Projects List
@@ -60,9 +59,9 @@ class-projects-hub/
 
 ## 👤 Maintained By
 
-**Name:** [Aapka naam]
-**Role:** Class Coordinator / Project Tracker
-**Contact:** [Aapka email ya GitHub profile link]
+**Name:** Pawan Darwai
+**Role:** Project Tracker & Mentor
+**Contact:** pawandarwai59@gmail.com
 
 ---
 

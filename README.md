@@ -42,7 +42,7 @@ Agar aap is class ke student ho aur apna project add karwana chahte ho, to neech
 
 ---
 
-## 📂 Repository Structure (Optional — agar submodules use karte ho)
+## 📂 Repository Structure (Optional — if using submodules)
 
 ```
 class-projects-hub/
@@ -58,9 +58,9 @@ class-projects-hub/
 
 ## 👤 Maintained By
 
-**Name:** Pawan Darwai
-**Role:** Project Tracker & Mentor
-**Contact:** pawandarwai59@gmail.com
+- **Name:** Pawan Darwai
+- **Role:** Project Tracker & Mentor
+- **Contact:** pawandarwai59@gmail.com
 
 ---
 

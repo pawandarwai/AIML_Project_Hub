@@ -5,10 +5,9 @@ Collection of all class project repositories
 
 >  This repository lists the projects of all the students/classes in our class. Each project is located in its leader's GitHub repository. Here only links and short descriptions are provided for easy tracking.
 
-**Course/Subject:** Artificial Intelligence and Machine Learning
-**Mentor/Faculty:** Priyanka Bhatele HOD Mam
-**Semester/Batch:** 4 th/ 2nd Year
-
+- **Course/Subject:** Artificial Intelligence and Machine Learning
+- **Mentor/Faculty:** Priyanka Bhatele HOD Mam
+- **Semester/Batch:** 4th/2nd Year
 ---
 
 ## 📌 About

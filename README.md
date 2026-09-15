@@ -10,7 +10,7 @@ Collection of all class project repositories
 - **Semester/Batch:** 4th/2nd Year
 ---
 
-## 📌 About
+## 📌 Abouts
 
 This repository is created based on the project assignments given by Hod Han, so that all student projects can be tracked in one place.
 ---

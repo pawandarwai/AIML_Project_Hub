@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Admin — AIML Project Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EEF2F5;--card:#fff;--ink:#141F2B;--soft:#4C5A67;--line:#D6DEE4;--teal:#1F6F78;--gold:#C89B3C;--done:#2F7D4F;--prog:#B07F17;--pend:#B4472A}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.5 'IBM Plex Sans',system-ui,sans-serif}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.wrap{max-width:1000px;margin:0 auto;padding:0 24px}
+header{background:#101A25;color:#fff;padding:18px 0}
+header .wrap{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+h1{font:600 20px 'Space Grotesk',sans-serif;margin:0}
+h2{font:600 18px 'Space Grotesk',sans-serif;margin:0 0 6px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px;margin:24px 0}
+label{display:block;font-size:13px;font-weight:500;color:var(--soft);margin:12px 0 4px}
+input,select,textarea{width:100%;padding:10px 12px;font:inherit;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink)}
+input:focus,select:focus,textarea:focus{border-color:var(--teal);outline:none}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+.btn{font:500 14px inherit;font-family:inherit;padding:9px 16px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+.btn:hover{border-color:var(--teal)}
+.btn.pri{background:var(--teal);border-color:var(--teal);color:#fff}
+.btn.pri:disabled{opacity:.5;cursor:default}
+.btn.del{color:var(--pend)}
+.bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.hint{font-size:13px;color:var(--soft);margin:8px 0 0}
+.msg{display:none;margin-top:14px;padding:10px 14px;border-radius:8px;font-size:14px}
+.msg.ok{display:block;background:#E4F0E8;color:var(--done)} .msg.err{display:block;background:#F5E4DE;color:var(--pend)} .msg.info{display:block;background:#F6EDD9;color:var(--prog)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-size:12px;color:var(--soft);font-weight:600;padding:8px;border-bottom:1px solid var(--line)}
+td{padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+.st{font-size:12px;font-weight:600;padding:3px 9px;border-radius:99px}
+.st.done{background:#E4F0E8;color:var(--done)} .st.progress{background:#F6EDD9;color:var(--prog)} .st.pending{background:#F5E4DE;color:var(--pend)}
+.acts{white-space:nowrap;text-align:right}
+.acts .btn{padding:5px 10px;font-size:13px}
+dialog{border:none;border-radius:16px;padding:26px;width:min(560px,94vw);max-height:90vh}
+dialog::backdrop{background:rgba(10,18,28,.55)}
+.dirty{font-size:13px;color:var(--prog);font-weight:500}
+#app{display:none}
+@media(max-width:640px){.g2{grid-template-columns:1fr} .hide-m{display:none}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><h1>Admin · AIML Project Hub</h1><div><a href="index.html" class="btn" style="text-decoration:none;display:inline-block">View site</a> <button class="btn" id="logout" style="display:none">Disconnect</button></div></div></header>
+
+<main class="wrap">
+  <section class="card" id="login">
+    <h2>Connect to GitHub</h2>
+    <p class="hint">Changes are saved by committing <b>projects.json</b> to your repo. Only someone with your access token can publish, so keep it private.</p>
+    <div class="g2">
+      <div><label for="owner">GitHub username</label><input id="owner" placeholder="your-username"></div>
+      <div><label for="repo">Repository name</label><input id="repo" placeholder="aiml-project-hub"></div>
+      <div><label for="branch">Branch</label><input id="branch" value="main"></div>
+      <div><label for="token">Access token</label><input id="token" type="password" placeholder="github_pat_…" autocomplete="off"></div>
+    </div>
+    <label style="display:flex;gap:8px;align-items:center;margin-top:14px"><input type="checkbox" id="remember" style="width:auto"> Remember on this device</label>
+    <p style="margin-top:16px"><button class="btn pri" id="connect">Connect</button></p>
+    <div class="msg" id="loginMsg"></div>
+  </section>
+
+  <section id="app">
+    <div class="card">
+      <div class="bar">
+        <div><h2>Projects <span id="count"></span></h2><span class="dirty" id="dirty"></span></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn" id="addBtn">+ Add project</button>
+          <button class="btn" id="exportBtn">Export JSON</button>
+          <button class="btn" id="importBtn">Import JSON</button>
+          <button class="btn pri" id="publish" disabled>Publish to GitHub</button>
+        </div>
+      </div>
+      <input type="file" id="importFile" accept=".json" hidden>
+      <div class="msg" id="appMsg"></div>
+      <div style="overflow-x:auto;margin-top:12px"><table><thead><tr><th>ID</th><th>Project</th><th class="hide-m">Leader</th><th>Status</th><th class="hide-m">Progress</th><th></th></tr></thead><tbody id="rows"></tbody></table></div>
+      <p class="hint">After publishing, GitHub Pages takes about 1–2 minutes to show the update on the live site.</p>
+    </div>
+  </section>
+</main>
+
+<dialog id="dlg">
+  <form id="form" method="dialog">
+    <h2 id="dlgTitle">Add project</h2>
+    <div class="g2">
+      <div><label for="f_id">ID</label><input id="f_id" required></div>
+      <div><label for="f_status">Status</label><select id="f_status"><option value="pending">Not started</option><option value="progress">In progress</option><option value="done">Completed</option></select></div>
+    </div>
+    <label for="f_name">Project name</label><input id="f_name" required>
+    <label for="f_desc">Description</label><textarea id="f_desc" rows="2"></textarea>
+    <label for="f_stack">Tech stack (comma separated)</label><input id="f_stack" placeholder="Python, OpenCV, Flask">
+    <label for="f_progress">Progress: <b id="pv">0</b>%</label><input id="f_progress" type="range" min="0" max="100" step="5" value="0">
+    <div class="g2">
+      <div><label for="f_leader">Team leader</label><input id="f_leader" required></div>
+      <div><label for="f_mentor">Mentor</label><input id="f_mentor" value="Priyanka Bhatele Mam"></div>
+    </div>
+    <label for="f_members">Members (comma separated)</label><input id="f_members">
+    <div class="g2">
+      <div><label for="f_repo">Repository link</label><input id="f_repo" placeholder="https://github.com/…"></div>
+      <div><label for="f_live">Live project link</label><input id="f_live" placeholder="https://… (optional)"></div>
+    </div>
+    <div class="msg" id="formMsg"></div>
+    <p style="display:flex;gap:10px;justify-content:flex-end;margin:20px 0 0"><button type="button" class="btn" id="cancel">Cancel</button><button class="btn pri" id="save" value="save">Save project</button></p>
+  </form>
+</dialog>
+
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const label = {done:'Completed', progress:'In progress', pending:'Not started'};
+const FILE = 'projects.json';
+let projects = [], sha = null, dirty = false, editing = null, cfg = {};
+
+function say(el, type, text){ el.className = 'msg ' + type; el.textContent = text; }
+function setDirty(v){ dirty = v; $('dirty').textContent = v ? '● Unpublished changes' : ''; $('publish').disabled = !v; }
+const b64enc = s => btoa(unescape(encodeURIComponent(s)));
+const b64dec = s => decodeURIComponent(escape(atob(s.replace(/\s/g, ''))));
+const api = (path, opt = {}) => fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${path}`, {
+  ...opt, headers: {Accept:'application/vnd.github+json', Authorization:'Bearer ' + cfg.token, 'Content-Type':'application/json'}
+});
+
+// Guess username/repo when hosted on github.io/<repo>/admin.html
+(function guess(){
+  const h = location.hostname;
+  if(h.endsWith('.github.io')){
+    $('owner').value = h.split('.')[0];
+    $('repo').value = location.pathname.split('/')[1] || h;
+  }
+  let s = null; try{ s = JSON.parse(localStorage.getItem('hub-admin') || sessionStorage.getItem('hub-admin')); }catch(_){}
+  if(s){ ['owner','repo','branch','token'].forEach(k => $(k).value = s[k] || ''); $('remember').checked = !!localStorage.getItem('hub-admin'); }
+})();
+
+async function load(){
+  const r = await api(`${FILE}?ref=${encodeURIComponent(cfg.branch)}&t=${Date.now()}`);
+  if(r.status === 401) throw new Error('Token is invalid or expired.');
+  if(r.status === 404){ sha = null; projects = []; return 'new'; }
+  if(!r.ok) throw new Error('GitHub error ' + r.status + '. Check username, repo and branch.');
+  const d = await r.json();
+  sha = d.sha; projects = JSON.parse(b64dec(d.content));
+}
+
+$('connect').onclick = async () => {
+  cfg = {owner:$('owner').value.trim(), repo:$('repo').value.trim(), branch:$('branch').value.trim() || 'main', token:$('token').value.trim()};
+  if(!cfg.owner || !cfg.repo || !cfg.token) return say($('loginMsg'), 'err', 'Fill in username, repository and token.');
+  say($('loginMsg'), 'info', 'Connecting…');
+  try{
+    const res = await load();
+    const store = $('remember').checked ? localStorage : sessionStorage;
+    localStorage.removeItem('hub-admin'); sessionStorage.removeItem('hub-admin');
+    try{ store.setItem('hub-admin', JSON.stringify(cfg)); }catch(_){}
+    $('login').style.display = 'none'; $('app').style.display = 'block'; $('logout').style.display = '';
+    renderRows(); setDirty(false);
+    if(res === 'new') say($('appMsg'), 'info', 'projects.json was not found. Add your projects and publish to create it.');
+  }catch(e){ say($('loginMsg'), 'err', e.message); }
+};
+$('logout').onclick = () => { localStorage.removeItem('hub-admin'); sessionStorage.removeItem('hub-admin'); location.reload(); };
+window.addEventListener('beforeunload', e => { if(dirty){ e.preventDefault(); e.returnValue = ''; } });
+
+function renderRows(){
+  $('count').textContent = `(${projects.length})`;
+  $('rows').innerHTML = projects.map((p, i) => `<tr>
+    <td>${esc(p.id)}</td><td><b>${esc(p.name)}</b></td><td class="hide-m">${esc(p.leader)}</td>
+    <td><span class="st ${esc(p.status)}">${label[p.status] || esc(p.status)}</span></td><td class="hide-m">${+p.progress || 0}%</td>
+    <td class="acts"><button class="btn" data-edit="${i}">Edit</button> <button class="btn del" data-del="${i}">Delete</button></td></tr>`).join('')
+    || '<tr><td colspan="6" style="text-align:center;color:var(--soft);padding:30px">No projects yet. Click “Add project”.</td></tr>';
+}
+$('rows').onclick = e => {
+  const ed = e.target.dataset.edit, dl = e.target.dataset.del;
+  if(ed !== undefined) openForm(+ed);
+  if(dl !== undefined && confirm(`Delete “${projects[dl].name}”?`)){ projects.splice(+dl, 1); renderRows(); setDirty(true); }
+};
+
+// ---- form ----
+const fields = {id:'f_id', name:'f_name', desc:'f_desc', status:'f_status', leader:'f_leader', mentor:'f_mentor', repo:'f_repo', liveLink:'f_live'};
+$('f_progress').oninput = () => $('pv').textContent = $('f_progress').value;
+function nextId(){ const n = projects.map(p => parseInt(String(p.id).replace(/\D/g, ''))).filter(Number.isFinite); return 'P-' + String((n.length ? Math.max(...n) : 0) + 1).padStart(2, '0'); }
+function openForm(i){
+  editing = i; const p = i === null ? {id:nextId(), status:'pending', progress:0, mentor:'Priyanka Bhatele Mam', stack:[], members:[]} : projects[i];
+  $('dlgTitle').textContent = i === null ? 'Add project' : 'Edit project';
+  for(const k in fields) $(fields[k]).value = p[k] ?? '';
+  $('f_stack').value = (p.stack || []).join(', '); $('f_members').value = (p.members || []).join(', ');
+  $('f_progress').value = p.progress || 0; $('pv').textContent = p.progress || 0;
+  $('formMsg').className = 'msg'; $('dlg').showModal();
+}
+$('addBtn').onclick = () => openForm(null);
+$('cancel').onclick = () => $('dlg').close();
+const list = s => s.split(',').map(x => x.trim()).filter(Boolean);
+$('form').addEventListener('submit', e => {
+  const p = {};
+  for(const k in fields) p[k] = $(fields[k]).value.trim();
+  p.stack = list($('f_stack').value); p.members = list($('f_members').value); p.progress = +$('f_progress').value;
+  if(p.status === 'done') p.progress = 100;
+  if(projects.some((x, i) => x.id === p.id && i !== editing)){ e.preventDefault(); return say($('formMsg'), 'err', `ID ${p.id} is already used. Choose a different ID.`); }
+  p.repo = p.repo || '#';
+  if(editing === null) projects.push(p); else projects[editing] = p;
+  renderRows(); setDirty(true);
+});
+
+// ---- publish / export / import ----
+$('publish').onclick = async () => {
+  $('publish').disabled = true; say($('appMsg'), 'info', 'Publishing…');
+  try{
+    const body = {message: `Update projects (${projects.length}) via admin`, content: b64enc(JSON.stringify(projects, null, 2) + '\n'), branch: cfg.branch};
+    if(sha) body.sha = sha;
+    const r = await api(FILE, {method:'PUT', body: JSON.stringify(body)});
+    if(r.status === 409 || r.status === 422) throw new Error('The file changed on GitHub since you opened this page. Export your JSON as a backup, disconnect, reconnect, and try again.');
+    if(r.status === 401 || r.status === 403 || r.status === 404) throw new Error('GitHub refused the save. Make sure the token has “Contents: Read and write” for this repository.');
+    if(!r.ok) throw new Error('GitHub error ' + r.status);
+    sha = (await r.json()).content.sha; setDirty(false);
+    say($('appMsg'), 'ok', 'Published. The live site will update in about 1–2 minutes.');
+  }catch(e){ say($('appMsg'), 'err', e.message); $('publish').disabled = false; }
+};
+$('exportBtn').onclick = () => {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(projects, null, 2)], {type:'application/json'}));
+  a.download = FILE; a.click(); URL.revokeObjectURL(a.href);
+};
+$('importBtn').onclick = () => $('importFile').click();
+$('importFile').onchange = async e => {
+  try{
+    const d = JSON.parse(await e.target.files[0].text());
+    if(!Array.isArray(d)) throw 0;
+    if(!confirm(`Replace the current list with ${d.length} imported projects?`)) return;
+    projects = d; renderRows(); setDirty(true);
+  }catch(_){ say($('appMsg'), 'err', 'That file is not a valid projects.json.'); }
+  e.target.value = '';
+};
+</script>
+</body>
+</html>

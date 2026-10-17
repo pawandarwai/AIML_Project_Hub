@@ -21,211 +21,418 @@ label{display:block;font-size:13px;font-weight:500;color:var(--soft);margin:12px
 input,select,textarea{width:100%;padding:10px 12px;font:inherit;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink)}
 input:focus,select:focus,textarea:focus{border-color:var(--teal);outline:none}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0 14px}
 .btn{font:500 14px inherit;font-family:inherit;padding:9px 16px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
 .btn:hover{border-color:var(--teal)}
 .btn.pri{background:var(--teal);border-color:var(--teal);color:#fff}
+.btn.pri:hover{background:#154D54}
 .btn.pri:disabled{opacity:.5;cursor:default}
-.btn.del{color:var(--pend)}
+.btn.del{color:var(--pend);border-color:var(--pend)}
+.btn.del:hover{background:var(--pend);color:#fff}
 .bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
 .hint{font-size:13px;color:var(--soft);margin:8px 0 0}
-.msg{display:none;margin-top:14px;padding:10px 14px;border-radius:8px;font-size:14px}
-.msg.ok{display:block;background:#E4F0E8;color:var(--done)} .msg.err{display:block;background:#F5E4DE;color:var(--pend)} .msg.info{display:block;background:#F6EDD9;color:var(--prog)}
+.msg{display:none;margin-top:14px;padding:12px 16px;border-radius:8px;font-size:14px;line-height:1.5}
+.msg.ok{display:block;background:#E4F0E8;color:var(--done)}
+.msg.err{display:block;background:#F5E4DE;color:var(--pend)}
+.msg.info{display:block;background:#F6EDD9;color:var(--prog)}
 table{width:100%;border-collapse:collapse;font-size:14px}
-th{text-align:left;font-size:12px;color:var(--soft);font-weight:600;padding:8px;border-bottom:1px solid var(--line)}
+th{text-align:left;font-size:12px;color:var(--soft);font-weight:600;padding:8px;border-bottom:2px solid var(--line)}
 td{padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
-.st{font-size:12px;font-weight:600;padding:3px 9px;border-radius:99px}
-.st.done{background:#E4F0E8;color:var(--done)} .st.progress{background:#F6EDD9;color:var(--prog)} .st.pending{background:#F5E4DE;color:var(--pend)}
-.acts{white-space:nowrap;text-align:right}
-.acts .btn{padding:5px 10px;font-size:13px}
-dialog{border:none;border-radius:16px;padding:26px;width:min(560px,94vw);max-height:90vh}
+tr:hover td{background:#f8fafc}
+.st{font-size:12px;font-weight:600;padding:3px 9px;border-radius:99px;white-space:nowrap}
+.st.done{background:#E4F0E8;color:var(--done)}
+.st.progress{background:#F6EDD9;color:var(--prog)}
+.st.pending{background:#F5E4DE;color:var(--pend)}
+.acts{white-space:nowrap;text-align:right;display:flex;gap:6px;justify-content:flex-end}
+dialog{border:none;border-radius:16px;padding:28px;width:min(580px,95vw);max-height:92vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2)}
 dialog::backdrop{background:rgba(10,18,28,.55)}
-.dirty{font-size:13px;color:var(--prog);font-weight:500}
+.dirty{font-size:13px;color:var(--prog);font-weight:600}
 #app{display:none}
-@media(max-width:640px){.g2{grid-template-columns:1fr} .hide-m{display:none}}
+.sync-status{font-size:12px;padding:4px 10px;border-radius:99px;font-weight:500}
+.sync-status.github{background:#E4F0E8;color:var(--done)}
+.sync-status.sheet{background:#E4F0E8;color:var(--done)}
+.sync-status.fail{background:#F5E4DE;color:var(--pend)}
+.sync-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:8px}
+.progress-preview{height:6px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:4px}
+.progress-preview span{display:block;height:100%;border-radius:99px;background:var(--teal);transition:width .2s}
+@media(max-width:640px){.g2,.g3{grid-template-columns:1fr}.hide-m{display:none}}
 </style>
 </head>
 <body>
-<header><div class="wrap"><h1>Admin · AIML Project Hub</h1><div><a href="index.html" class="btn" style="text-decoration:none;display:inline-block">View site</a> <button class="btn" id="logout" style="display:none">Disconnect</button></div></div></header>
+<header>
+  <div class="wrap">
+    <h1>⚙️ Admin · AIML Project Hub</h1>
+    <div style="display:flex;gap:8px;align-items:center">
+      <a href="index.html" class="btn" style="text-decoration:none">← View site</a>
+      <button class="btn" id="logout" style="display:none">Disconnect</button>
+    </div>
+  </div>
+</header>
 
 <main class="wrap">
+
+  <!-- LOGIN -->
   <section class="card" id="login">
     <h2>Connect to GitHub</h2>
-    <p class="hint">Changes are saved by committing <b>projects.json</b> to your repo. Only someone with your access token can publish, so keep it private.</p>
+    <p class="hint">Changes publish hone par GitHub <b>aur</b> Google Sheet dono update honge.</p>
     <div class="g2">
-      <div><label for="owner">GitHub username</label><input id="owner" placeholder="your-username"></div>
-      <div><label for="repo">Repository name</label><input id="repo" placeholder="aiml-project-hub"></div>
-      <div><label for="branch">Branch</label><input id="branch" value="main"></div>
-      <div><label for="token">Access token</label><input id="token" type="password" placeholder="github_pat_…" autocomplete="off"></div>
+      <div><label>GitHub Username</label><input id="owner" placeholder="your-username"></div>
+      <div><label>Repository Name</label><input id="repo" placeholder="aiml-project-hub"></div>
+      <div><label>Branch</label><input id="branch" value="main"></div>
+      <div><label>Access Token</label><input id="token" type="password" placeholder="github_pat_…" autocomplete="off"></div>
     </div>
-    <label style="display:flex;gap:8px;align-items:center;margin-top:14px"><input type="checkbox" id="remember" style="width:auto"> Remember on this device</label>
-    <p style="margin-top:16px"><button class="btn pri" id="connect">Connect</button></p>
+    <label style="display:flex;gap:8px;align-items:center;margin-top:14px;cursor:pointer">
+      <input type="checkbox" id="remember" style="width:auto"> Remember on this device
+    </label>
+    <p style="margin-top:16px"><button class="btn pri" id="connect">Connect →</button></p>
     <div class="msg" id="loginMsg"></div>
   </section>
 
+  <!-- APP -->
   <section id="app">
     <div class="card">
       <div class="bar">
-        <div><h2>Projects <span id="count"></span></h2><span class="dirty" id="dirty"></span></div>
+        <div>
+          <h2>Projects <span id="count" style="color:var(--soft);font-weight:400"></span></h2>
+          <div class="sync-row">
+            <span class="dirty" id="dirty"></span>
+            <span class="sync-status" id="ghStatus" style="display:none"></span>
+            <span class="sync-status" id="shStatus" style="display:none"></span>
+          </div>
+        </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn" id="addBtn">+ Add project</button>
+          <button class="btn" id="addBtn">+ Add Project</button>
           <button class="btn" id="exportBtn">Export JSON</button>
-          <button class="btn" id="importBtn">Import JSON</button>
-          <button class="btn pri" id="publish" disabled>Publish to GitHub</button>
+          <button class="btn pri" id="publish" disabled>🚀 Publish (GitHub + Sheet)</button>
         </div>
       </div>
-      <input type="file" id="importFile" accept=".json" hidden>
       <div class="msg" id="appMsg"></div>
-      <div style="overflow-x:auto;margin-top:12px"><table><thead><tr><th>ID</th><th>Project</th><th class="hide-m">Leader</th><th>Status</th><th class="hide-m">Progress</th><th></th></tr></thead><tbody id="rows"></tbody></table></div>
-      <p class="hint">After publishing, GitHub Pages takes about 1–2 minutes to show the update on the live site.</p>
+      <div style="overflow-x:auto;margin-top:16px">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Project Name</th>
+              <th class="hide-m">Leader</th>
+              <th>Status</th>
+              <th class="hide-m">Progress</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+      <p class="hint" style="margin-top:16px">💡 Publish karne ke baad GitHub Pages 1-2 min mein aur Google Sheet turant update hogi.</p>
     </div>
   </section>
 </main>
 
+<!-- EDIT DIALOG -->
 <dialog id="dlg">
   <form id="form" method="dialog">
-    <h2 id="dlgTitle">Add project</h2>
+    <h2 id="dlgTitle" style="margin:0 0 16px;font-family:'Space Grotesk',sans-serif">Add Project</h2>
+
     <div class="g2">
-      <div><label for="f_id">ID</label><input id="f_id" required></div>
-      <div><label for="f_status">Status</label><select id="f_status"><option value="pending">Not started</option><option value="progress">In progress</option><option value="done">Completed</option></select></div>
+      <div>
+        <label>Project ID</label>
+        <input id="f_id" required placeholder="P-01">
+      </div>
+      <div>
+        <label>Status</label>
+        <select id="f_status">
+          <option value="pending">Not Started</option>
+          <option value="progress">In Progress</option>
+          <option value="done">Completed</option>
+        </select>
+      </div>
     </div>
-    <label for="f_name">Project name</label><input id="f_name" required>
-    <label for="f_desc">Description</label><textarea id="f_desc" rows="2"></textarea>
-    <label for="f_stack">Tech stack (comma separated)</label><input id="f_stack" placeholder="Python, OpenCV, Flask">
-    <label for="f_progress">Progress: <b id="pv">0</b>%</label><input id="f_progress" type="range" min="0" max="100" step="5" value="0">
+
+    <label>Project Name</label>
+    <input id="f_name" required placeholder="Project ka naam">
+
+    <label>Description</label>
+    <textarea id="f_desc" rows="2" placeholder="Short description"></textarea>
+
+    <label>Tech Stack (comma se alag karo)</label>
+    <input id="f_stack" placeholder="Python, OpenCV, Flask">
+
+    <label>Progress: <b id="pv">0</b>%</label>
+    <input id="f_progress" type="range" min="0" max="100" step="5" value="0">
+    <div class="progress-preview"><span id="progressBar" style="width:0%"></span></div>
+
     <div class="g2">
-      <div><label for="f_leader">Team leader</label><input id="f_leader" required></div>
-      <div><label for="f_mentor">Mentor</label><input id="f_mentor" value="Priyanka Bhatele Mam"></div>
+      <div>
+        <label>Team Leader</label>
+        <input id="f_leader" required placeholder="Leader ka naam">
+      </div>
+      <div>
+        <label>Mentor</label>
+        <input id="f_mentor" value="Priyanka Bhatele Mam">
+      </div>
     </div>
-    <label for="f_members">Members (comma separated)</label><input id="f_members">
+
+    <label>Members (comma se alag karo)</label>
+    <input id="f_members" placeholder="Rahul, Priya, Karan">
+
     <div class="g2">
-      <div><label for="f_repo">Repository link</label><input id="f_repo" placeholder="https://github.com/…"></div>
-      <div><label for="f_live">Live project link</label><input id="f_live" placeholder="https://… (optional)"></div>
+      <div>
+        <label>GitHub Repository Link</label>
+        <input id="f_repo" placeholder="https://github.com/…">
+      </div>
+      <div>
+        <label>Live Project Link (optional)</label>
+        <input id="f_live" placeholder="https://…">
+      </div>
     </div>
+
     <div class="msg" id="formMsg"></div>
-    <p style="display:flex;gap:10px;justify-content:flex-end;margin:20px 0 0"><button type="button" class="btn" id="cancel">Cancel</button><button class="btn pri" id="save" value="save">Save project</button></p>
+
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px">
+      <button type="button" class="btn" id="cancelBtn">Cancel</button>
+      <button class="btn del" type="button" id="deleteBtn" style="display:none">Delete Project</button>
+      <button class="btn pri" type="submit">Save Project</button>
+    </div>
   </form>
 </dialog>
 
 <script>
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxlPz0DpUnqbOgn3ZVB99NTGjM0um3Uv2TN6st8mine8Dvm4nY1YPXctrDtdbNhcuuN9Q/exec';
+const FILE = 'projects.json';
+
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const label = {done:'Completed', progress:'In progress', pending:'Not started'};
-const FILE = 'projects.json';
+const statusLabel = {done:'Completed', progress:'In Progress', pending:'Not Started'};
+
 let projects = [], sha = null, dirty = false, editing = null, cfg = {};
 
 function say(el, type, text){ el.className = 'msg ' + type; el.textContent = text; }
 function setDirty(v){ dirty = v; $('dirty').textContent = v ? '● Unpublished changes' : ''; $('publish').disabled = !v; }
+
 const b64enc = s => btoa(unescape(encodeURIComponent(s)));
-const b64dec = s => decodeURIComponent(escape(atob(s.replace(/\s/g, ''))));
-const api = (path, opt = {}) => fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${path}`, {
-  ...opt, headers: {Accept:'application/vnd.github+json', Authorization:'Bearer ' + cfg.token, 'Content-Type':'application/json'}
+const b64dec = s => decodeURIComponent(escape(atob(s.replace(/\s/g,''))));
+const api = (path, opt={}) => fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${path}`, {
+  ...opt,
+  headers: {Accept:'application/vnd.github+json', Authorization:'Bearer '+cfg.token, 'Content-Type':'application/json'}
 });
 
-// Guess username/repo when hosted on github.io/<repo>/admin.html
+// Auto-fill from github.io URL
 (function guess(){
   const h = location.hostname;
-  if(h.endsWith('.github.io')){
-    $('owner').value = h.split('.')[0];
-    $('repo').value = location.pathname.split('/')[1] || h;
-  }
-  let s = null; try{ s = JSON.parse(localStorage.getItem('hub-admin') || sessionStorage.getItem('hub-admin')); }catch(_){}
-  if(s){ ['owner','repo','branch','token'].forEach(k => $(k).value = s[k] || ''); $('remember').checked = !!localStorage.getItem('hub-admin'); }
+  if(h.endsWith('.github.io')){ $('owner').value = h.split('.')[0]; $('repo').value = location.pathname.split('/')[1] || ''; }
+  let s = null;
+  try{ s = JSON.parse(localStorage.getItem('hub-admin') || sessionStorage.getItem('hub-admin')); }catch(_){}
+  if(s){ ['owner','repo','branch','token'].forEach(k => $(k).value = s[k]||''); $('remember').checked = !!localStorage.getItem('hub-admin'); }
 })();
 
-async function load(){
+// ─── CONNECT ───
+async function loadFromGitHub(){
   const r = await api(`${FILE}?ref=${encodeURIComponent(cfg.branch)}&t=${Date.now()}`);
-  if(r.status === 401) throw new Error('Token is invalid or expired.');
+  if(r.status === 401) throw new Error('Token galat hai ya expire ho gaya.');
   if(r.status === 404){ sha = null; projects = []; return 'new'; }
-  if(!r.ok) throw new Error('GitHub error ' + r.status + '. Check username, repo and branch.');
+  if(!r.ok) throw new Error('GitHub error ' + r.status);
   const d = await r.json();
-  sha = d.sha; projects = JSON.parse(b64dec(d.content));
+  sha = d.sha;
+  projects = JSON.parse(b64dec(d.content));
+  return 'loaded';
 }
 
 $('connect').onclick = async () => {
-  cfg = {owner:$('owner').value.trim(), repo:$('repo').value.trim(), branch:$('branch').value.trim() || 'main', token:$('token').value.trim()};
-  if(!cfg.owner || !cfg.repo || !cfg.token) return say($('loginMsg'), 'err', 'Fill in username, repository and token.');
-  say($('loginMsg'), 'info', 'Connecting…');
+  cfg = {
+    owner: $('owner').value.trim(),
+    repo:  $('repo').value.trim(),
+    branch:$('branch').value.trim() || 'main',
+    token: $('token').value.trim()
+  };
+  if(!cfg.owner || !cfg.repo || !cfg.token) return say($('loginMsg'),'err','Username, repo aur token required hain.');
+  say($('loginMsg'),'info','Connecting…');
   try{
-    const res = await load();
+    const res = await loadFromGitHub();
     const store = $('remember').checked ? localStorage : sessionStorage;
     localStorage.removeItem('hub-admin'); sessionStorage.removeItem('hub-admin');
     try{ store.setItem('hub-admin', JSON.stringify(cfg)); }catch(_){}
-    $('login').style.display = 'none'; $('app').style.display = 'block'; $('logout').style.display = '';
+    $('login').style.display = 'none';
+    $('app').style.display = 'block';
+    $('logout').style.display = '';
     renderRows(); setDirty(false);
-    if(res === 'new') say($('appMsg'), 'info', 'projects.json was not found. Add your projects and publish to create it.');
-  }catch(e){ say($('loginMsg'), 'err', e.message); }
+    if(res === 'new') say($('appMsg'),'info','projects.json nahi mili. Projects add karke publish karo.');
+  }catch(e){ say($('loginMsg'),'err', e.message); }
 };
-$('logout').onclick = () => { localStorage.removeItem('hub-admin'); sessionStorage.removeItem('hub-admin'); location.reload(); };
-window.addEventListener('beforeunload', e => { if(dirty){ e.preventDefault(); e.returnValue = ''; } });
 
+$('logout').onclick = () => {
+  localStorage.removeItem('hub-admin'); sessionStorage.removeItem('hub-admin');
+  location.reload();
+};
+
+window.addEventListener('beforeunload', e => { if(dirty){ e.preventDefault(); e.returnValue=''; } });
+
+// ─── TABLE ───
 function renderRows(){
   $('count').textContent = `(${projects.length})`;
-  $('rows').innerHTML = projects.map((p, i) => `<tr>
-    <td>${esc(p.id)}</td><td><b>${esc(p.name)}</b></td><td class="hide-m">${esc(p.leader)}</td>
-    <td><span class="st ${esc(p.status)}">${label[p.status] || esc(p.status)}</span></td><td class="hide-m">${+p.progress || 0}%</td>
-    <td class="acts"><button class="btn" data-edit="${i}">Edit</button> <button class="btn del" data-del="${i}">Delete</button></td></tr>`).join('')
-    || '<tr><td colspan="6" style="text-align:center;color:var(--soft);padding:30px">No projects yet. Click “Add project”.</td></tr>';
+  $('rows').innerHTML = projects.map((p,i) => `
+    <tr>
+      <td><b>${esc(p.id)}</b></td>
+      <td>${esc(p.name)}</td>
+      <td class="hide-m">${esc(p.leader)}</td>
+      <td><span class="st ${esc(p.status)}">${statusLabel[p.status]||esc(p.status)}</span></td>
+      <td class="hide-m">${p.progress||0}%</td>
+      <td class="acts">
+        <button class="btn" style="padding:5px 10px;font-size:13px" data-edit="${i}">Edit</button>
+      </td>
+    </tr>`).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--soft);padding:30px">Koi project nahi. "Add Project" dabao.</td></tr>';
 }
+
 $('rows').onclick = e => {
-  const ed = e.target.dataset.edit, dl = e.target.dataset.del;
+  const ed = e.target.dataset.edit;
   if(ed !== undefined) openForm(+ed);
-  if(dl !== undefined && confirm(`Delete “${projects[dl].name}”?`)){ projects.splice(+dl, 1); renderRows(); setDirty(true); }
 };
 
-// ---- form ----
-const fields = {id:'f_id', name:'f_name', desc:'f_desc', status:'f_status', leader:'f_leader', mentor:'f_mentor', repo:'f_repo', liveLink:'f_live'};
-$('f_progress').oninput = () => $('pv').textContent = $('f_progress').value;
-function nextId(){ const n = projects.map(p => parseInt(String(p.id).replace(/\D/g, ''))).filter(Number.isFinite); return 'P-' + String((n.length ? Math.max(...n) : 0) + 1).padStart(2, '0'); }
-function openForm(i){
-  editing = i; const p = i === null ? {id:nextId(), status:'pending', progress:0, mentor:'Priyanka Bhatele Mam', stack:[], members:[]} : projects[i];
-  $('dlgTitle').textContent = i === null ? 'Add project' : 'Edit project';
-  for(const k in fields) $(fields[k]).value = p[k] ?? '';
-  $('f_stack').value = (p.stack || []).join(', '); $('f_members').value = (p.members || []).join(', ');
-  $('f_progress').value = p.progress || 0; $('pv').textContent = p.progress || 0;
-  $('formMsg').className = 'msg'; $('dlg').showModal();
+// ─── FORM ───
+$('f_progress').oninput = () => {
+  $('pv').textContent = $('f_progress').value;
+  $('progressBar').style.width = $('f_progress').value + '%';
+};
+
+function nextId(){
+  const nums = projects.map(p => parseInt(String(p.id).replace(/\D/g,''))).filter(Number.isFinite);
+  return 'P-' + String((nums.length ? Math.max(...nums) : 0) + 1).padStart(2,'0');
 }
-$('addBtn').onclick = () => openForm(null);
-$('cancel').onclick = () => $('dlg').close();
-const list = s => s.split(',').map(x => x.trim()).filter(Boolean);
-$('form').addEventListener('submit', e => {
-  const p = {};
-  for(const k in fields) p[k] = $(fields[k]).value.trim();
-  p.stack = list($('f_stack').value); p.members = list($('f_members').value); p.progress = +$('f_progress').value;
-  if(p.status === 'done') p.progress = 100;
-  if(projects.some((x, i) => x.id === p.id && i !== editing)){ e.preventDefault(); return say($('formMsg'), 'err', `ID ${p.id} is already used. Choose a different ID.`); }
-  p.repo = p.repo || '#';
-  if(editing === null) projects.push(p); else projects[editing] = p;
-  renderRows(); setDirty(true);
+
+function openForm(i){
+  editing = i;
+  const p = i === null
+    ? {id:nextId(), status:'pending', progress:0, mentor:'Priyanka Bhatele Mam', stack:[], members:[]}
+    : projects[i];
+
+  $('dlgTitle').textContent = i === null ? 'Add Project' : 'Edit Project';
+  $('f_id').value       = p.id || '';
+  $('f_name').value     = p.name || '';
+  $('f_desc').value     = p.desc || '';
+  $('f_stack').value    = Array.isArray(p.stack) ? p.stack.join(', ') : (p.stack||'');
+  $('f_status').value   = p.status || 'pending';
+  $('f_progress').value = p.progress || 0;
+  $('pv').textContent   = p.progress || 0;
+  $('progressBar').style.width = (p.progress||0) + '%';
+  $('f_leader').value   = p.leader || '';
+  $('f_mentor').value   = p.mentor || 'Priyanka Bhatele Mam';
+  $('f_members').value  = Array.isArray(p.members) ? p.members.join(', ') : (p.members||'');
+  $('f_repo').value     = p.repo === '#' ? '' : (p.repo||'');
+  $('f_live').value     = p.liveLink || '';
+
+  $('deleteBtn').style.display = i === null ? 'none' : '';
+  $('formMsg').className = 'msg';
+  $('dlg').showModal();
+}
+
+$('addBtn').onclick  = () => openForm(null);
+$('cancelBtn').onclick = () => $('dlg').close();
+
+$('deleteBtn').onclick = () => {
+  if(!confirm(`"${projects[editing].name}" delete karna chahte ho?`)) return;
+  projects.splice(editing, 1);
+  $('dlg').close();
+  renderRows();
+  setDirty(true);
+};
+
+const csvList = s => s.split(',').map(x=>x.trim()).filter(Boolean);
+
+$('form').addEventListener('submit', () => {
+  const p = {
+    id:       $('f_id').value.trim(),
+    name:     $('f_name').value.trim(),
+    desc:     $('f_desc').value.trim() || 'Coming soon',
+    stack:    csvList($('f_stack').value),
+    status:   $('f_status').value,
+    progress: $('f_status').value === 'done' ? 100 : +$('f_progress').value,
+    leader:   $('f_leader').value.trim(),
+    mentor:   $('f_mentor').value.trim() || 'Priyanka Bhatele Mam',
+    members:  csvList($('f_members').value),
+    repo:     $('f_repo').value.trim() || '#',
+    liveLink: $('f_live').value.trim()
+  };
+
+  if(projects.some((x,i) => x.id === p.id && i !== editing)){
+    $('formMsg').className = 'msg err';
+    $('formMsg').textContent = `ID "${p.id}" already use ho raha hai.`;
+    return;
+  }
+
+  if(editing === null) projects.push(p);
+  else projects[editing] = p;
+
+  renderRows();
+  setDirty(true);
 });
 
-// ---- publish / export / import ----
+// ─── PUBLISH (GitHub + Sheet) ───
+function showSync(ghOk, shOk){
+  const gh = $('ghStatus'), sh = $('shStatus');
+  gh.style.display = ''; sh.style.display = '';
+  gh.className = 'sync-status ' + (ghOk ? 'github' : 'fail');
+  sh.className = 'sync-status ' + (shOk ? 'sheet'  : 'fail');
+  gh.textContent = ghOk ? '✓ GitHub updated' : '✗ GitHub failed';
+  sh.textContent = shOk ? '✓ Sheet updated'  : '✗ Sheet failed';
+}
+
 $('publish').onclick = async () => {
-  $('publish').disabled = true; say($('appMsg'), 'info', 'Publishing…');
+  $('publish').disabled = true;
+  $('ghStatus').style.display = 'none';
+  $('shStatus').style.display = 'none';
+  say($('appMsg'),'info','Publishing…');
+
+  let ghOk = false, shOk = false;
+
+  // 1. GitHub update
   try{
-    const body = {message: `Update projects (${projects.length}) via admin`, content: b64enc(JSON.stringify(projects, null, 2) + '\n'), branch: cfg.branch};
+    const body = {
+      message: `Update projects (${projects.length}) via admin`,
+      content: b64enc(JSON.stringify(projects, null, 2) + '\n'),
+      branch: cfg.branch
+    };
     if(sha) body.sha = sha;
     const r = await api(FILE, {method:'PUT', body: JSON.stringify(body)});
-    if(r.status === 409 || r.status === 422) throw new Error('The file changed on GitHub since you opened this page. Export your JSON as a backup, disconnect, reconnect, and try again.');
-    if(r.status === 401 || r.status === 403 || r.status === 404) throw new Error('GitHub refused the save. Make sure the token has “Contents: Read and write” for this repository.');
+    if(r.status === 409 || r.status === 422) throw new Error('File GitHub par change ho gayi. Export karke reconnect karo.');
+    if(r.status === 401 || r.status === 403) throw new Error('Token mein "Contents: Read and write" permission nahi hai.');
     if(!r.ok) throw new Error('GitHub error ' + r.status);
-    sha = (await r.json()).content.sha; setDirty(false);
-    say($('appMsg'), 'ok', 'Published. The live site will update in about 1–2 minutes.');
-  }catch(e){ say($('appMsg'), 'err', e.message); $('publish').disabled = false; }
+    sha = (await r.json()).content.sha;
+    ghOk = true;
+  }catch(e){
+    say($('appMsg'),'err', '⚠ GitHub: ' + e.message);
+    showSync(false, false);
+    $('publish').disabled = false;
+    return;
+  }
+
+  // 2. Google Sheet update via Apps Script
+  try{
+    const r = await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify(projects),
+      headers: {'Content-Type': 'text/plain'}
+    });
+    const d = await r.json();
+    if(d.ok) shOk = true;
+    else throw new Error(d.error || 'Apps Script error');
+  }catch(e){
+    console.warn('Sheet update failed:', e.message);
+    // GitHub update hua, Sheet nahi — partial success
+  }
+
+  showSync(ghOk, shOk);
+  setDirty(false);
+
+  if(ghOk && shOk){
+    say($('appMsg'),'ok','✅ GitHub aur Google Sheet dono update ho gaye! Site 1-2 min mein live hogi.');
+  } else if(ghOk){
+    say($('appMsg'),'ok','✅ GitHub update ho gaya. ⚠ Sheet update nahi hua — Apps Script check karo.');
+  }
 };
+
+// ─── EXPORT ───
 $('exportBtn').onclick = () => {
   const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([JSON.stringify(projects, null, 2)], {type:'application/json'}));
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(projects,null,2)],{type:'application/json'}));
   a.download = FILE; a.click(); URL.revokeObjectURL(a.href);
-};
-$('importBtn').onclick = () => $('importFile').click();
-$('importFile').onchange = async e => {
-  try{
-    const d = JSON.parse(await e.target.files[0].text());
-    if(!Array.isArray(d)) throw 0;
-    if(!confirm(`Replace the current list with ${d.length} imported projects?`)) return;
-    projects = d; renderRows(); setDirty(true);
-  }catch(_){ say($('appMsg'), 'err', 'That file is not a valid projects.json.'); }
-  e.target.value = '';
 };
 </script>
 </body>

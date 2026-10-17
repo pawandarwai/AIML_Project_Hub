@@ -52,6 +52,9 @@ dialog::backdrop{background:rgba(10,18,28,.55)}
 .sync-status.github{background:#E4F0E8;color:var(--done)}
 .sync-status.sheet{background:#E4F0E8;color:var(--done)}
 .sync-status.fail{background:#F5E4DE;color:var(--pend)}
+.export-opt{display:block;width:100%;text-align:left;padding:11px 16px;font:500 13px 'IBM Plex Sans',inherit;background:none;border:none;color:var(--ink);cursor:pointer}
+.export-opt:hover{background:var(--bg)}
+.export-opt+.export-opt{border-top:1px solid var(--line)}
 .sync-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:8px}
 .progress-preview{height:6px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:4px}
 .progress-preview span{display:block;height:100%;border-radius:99px;background:var(--teal);transition:width .2s}
@@ -74,7 +77,7 @@ dialog::backdrop{background:rgba(10,18,28,.55)}
   <!-- LOGIN -->
   <section class="card" id="login">
     <h2>Connect to GitHub</h2>
-    <p class="hint">Publishing the changes will update both GitHub <b>and</b> Google Sheet.</p>
+    <p class="hint">Changes publish hone par GitHub <b>aur</b> Google Sheet dono update honge.</p>
     <div class="g2">
       <div><label>GitHub Username</label><input id="owner" placeholder="your-username"></div>
       <div><label>Repository Name</label><input id="repo" placeholder="aiml-project-hub"></div>
@@ -102,7 +105,15 @@ dialog::backdrop{background:rgba(10,18,28,.55)}
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
           <button class="btn" id="addBtn">+ Add Project</button>
-          <button class="btn" id="exportBtn">Export JSON</button>
+          <button class="btn" id="refreshBtn">↻ Refresh from Sheet</button>
+          <div style="position:relative;display:inline-block">
+            <button class="btn" id="exportBtn">Export ▾</button>
+            <div id="exportMenu" style="display:none;position:absolute;top:calc(100% + 6px);right:0;background:var(--card);border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.12);min-width:180px;z-index:99;overflow:hidden">
+              <button class="export-opt" data-type="json">📄 Export as JSON</button>
+              <button class="export-opt" data-type="csv">📊 Export as CSV</button>
+              <button class="export-opt" data-type="pdf">🖨 Export as PDF</button>
+            </div>
+          </div>
           <button class="btn pri" id="publish" disabled>🚀 Publish (GitHub + Sheet)</button>
         </div>
       </div>
@@ -122,7 +133,7 @@ dialog::backdrop{background:rgba(10,18,28,.55)}
           <tbody id="rows"></tbody>
         </table>
       </div>
-      <p class="hint" style="margin-top:16px">💡 After publishing, GitHub Pages will update within 1-2 minutes, and the Google Sheet will update instantly.</p>
+      <p class="hint" style="margin-top:16px">💡 Publish karne ke baad GitHub Pages 1-2 min mein aur Google Sheet turant update hogi.</p>
     </div>
   </section>
 </main>
@@ -196,7 +207,7 @@ dialog::backdrop{background:rgba(10,18,28,.55)}
 </dialog>
 
 <script>
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxlPz0DpUnqbOgn3ZVB99NTGjM0um3Uv2TN6st8mine8Dvm4nY1YPXctrDtdbNhcuuN9Q/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxl2IW0K8FFsNRmgGuZkxMkK1-7CgIFpGyDbvLLQR85qDNBCTNYgsoFVpxPojjDI8eZtw/exec';
 const FILE = 'projects.json';
 
 const $ = id => document.getElementById(id);
@@ -210,131 +221,109 @@ function setDirty(v){ dirty = v; $('dirty').textContent = v ? '● Unpublished c
 
 const b64enc = s => btoa(unescape(encodeURIComponent(s)));
 const b64dec = s => decodeURIComponent(escape(atob(s.replace(/\s/g,''))));
-const api = (path, opt={}) => fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${path}`, {
+const githubApi = (path, opt={}) => fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${path}`, {
   ...opt,
   headers: {Accept:'application/vnd.github+json', Authorization:'Bearer '+cfg.token, 'Content-Type':'application/json'}
 });
 
-// Auto-fill from github.io URL
-(function guess(){
+// Auto-fill credentials from github.io URL
+(function restoreSession(){
   const h = location.hostname;
-  if(h.endsWith('.github.io')){ $('owner').value = h.split('.')[0]; $('repo').value = location.pathname.split('/')[1] || ''; }
-  let s = null;
-  try{ s = JSON.parse(localStorage.getItem('hub-admin') || sessionStorage.getItem('hub-admin')); }catch(_){}
-  if(s){ ['owner','repo','branch','token'].forEach(k => $(k).value = s[k]||''); $('remember').checked = !!localStorage.getItem('hub-admin'); }
+  if(h.endsWith('.github.io')){
+    $('owner').value = h.split('.')[0];
+    $('repo').value  = location.pathname.split('/')[1] || '';
+  }
+  let saved = null;
+  try{ saved = JSON.parse(localStorage.getItem('hub-admin') || sessionStorage.getItem('hub-admin')); }catch(_){}
+  if(saved){
+    ['owner','repo','branch','token'].forEach(k => $(k).value = saved[k] || '');
+    $('remember').checked = !!localStorage.getItem('hub-admin');
+  }
 })();
 
-// ─── CONNECT ───
-const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRe2a8KLuGyJGkRuqjbFJNTuWsBJdrt826VL76nen8LZprzz5U4qlgCWDf5WZxoybNDl-UD09bKNDAc/pub?gid=1225773506&single=true&output=csv';
-const CORS = 'https://corsproxy.io/?url=';
+// ── LOAD DATA ──
+// Step 1: get SHA from GitHub (required for publishing)
+// Step 2: load latest project data from Apps Script (which reads the Sheet directly)
+// Step 3: fallback to projects.json on GitHub if Apps Script fails
+async function loadData(){
+  // Get SHA from GitHub
+  const ghRes = await githubApi(`${FILE}?ref=${encodeURIComponent(cfg.branch)}&t=${Date.now()}`);
+  if(ghRes.status === 401) throw new Error('Token is invalid or expired.');
+  if(ghRes.status === 404){ sha = null; }
+  else if(!ghRes.ok) throw new Error('GitHub error ' + ghRes.status + '. Check username, repo and branch.');
+  else { const d = await ghRes.json(); sha = d.sha; }
 
-function parseCSV(text){
-  const lines = text.trim().split(/\r?\n/);
-  const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
-  return lines.slice(1).map(row => {
-    const cols=[]; let cur='', inQ=false;
-    for(let i=0;i<row.length;i++){
-      const c=row[i];
-      if(c==='"'){inQ=!inQ;}
-      else if(c===','&&!inQ){cols.push(cur.trim());cur='';}
-      else cur+=c;
-    }
-    cols.push(cur.trim());
-    const obj={};
-    headers.forEach((h,i)=>obj[h]=(cols[i]||'').replace(/^"|"$/g,'').trim());
-    return obj;
-  }).filter(p=>p.name);
-}
-
-function csvToProjects(rows){
-  return rows.map(r=>({
-    id:       r.id||'P-??',
-    name:     r.name||'',
-    desc:     r.desc||'Coming soon',
-    stack:    r.stack ? r.stack.split(',').map(x=>x.trim()).filter(Boolean) : [],
-    status:   ['done','progress','pending'].includes(r.status) ? r.status : 'pending',
-    progress: Math.min(100,Math.max(0,parseInt(r.progress)||0)),
-    leader:   r.leader||'',
-    members:  r.members ? r.members.split(',').map(x=>x.trim()).filter(Boolean) : [],
-    mentor:   r.mentor||'Priyanka Bhatele Mam',
-    repo:     r.repo&&r.repo!=='#' ? r.repo : '#',
-    liveLink: r.livelink||''
-  }));
-}
-
-async function loadFromGitHub(){
-  // Get SHA from GitHub (needed for publishing)
-  const r = await api(`${FILE}?ref=${encodeURIComponent(cfg.branch)}&t=${Date.now()}`);
-  if(r.status === 401) throw new Error('Token galat hai ya expire ho gaya.');
-  if(r.status === 404){ sha = null; }
-  else if(!r.ok) throw new Error('GitHub error ' + r.status);
-  else { const d = await r.json(); sha = d.sha; }
-
-  // Load latest data from Google Sheet
+  // Try Apps Script to get Sheet data
   try{
-    const sr = await fetch(CORS + encodeURIComponent(SHEET_CSV));
-    if(sr.ok){
-      const text = await sr.text();
-      const rows = parseCSV(text);
-      if(rows.length){ projects = csvToProjects(rows); return 'sheet'; }
+    const asRes = await fetch(APPS_SCRIPT_URL + '?action=read');
+    if(asRes.ok){
+      const d = await asRes.json();
+      if(d.ok && Array.isArray(d.projects) && d.projects.length){
+        projects = d.projects;
+        return 'sheet';
+      }
     }
   }catch(_){}
 
-  // Fallback: load from projects.json on GitHub
+  // Fallback: load from projects.json
   if(sha){
-    const fr = await api(`${FILE}?ref=${encodeURIComponent(cfg.branch)}&t=${Date.now()}`);
-    if(fr.ok){ const d = await fr.json(); projects = JSON.parse(b64dec(d.content)); return 'json'; }
+    try{
+      const jRes = await githubApi(`${FILE}?ref=${encodeURIComponent(cfg.branch)}&t=${Date.now()}`);
+      if(jRes.ok){ const d = await jRes.json(); projects = JSON.parse(b64dec(d.content)); return 'json'; }
+    }catch(_){}
   }
 
   projects = [];
-  return 'new';
+  return 'empty';
 }
 
+// ── CONNECT ──
 $('connect').onclick = async () => {
   cfg = {
-    owner: $('owner').value.trim(),
-    repo:  $('repo').value.trim(),
-    branch:$('branch').value.trim() || 'main',
-    token: $('token').value.trim()
+    owner:  $('owner').value.trim(),
+    repo:   $('repo').value.trim(),
+    branch: $('branch').value.trim() || 'main',
+    token:  $('token').value.trim()
   };
-  if(!cfg.owner || !cfg.repo || !cfg.token) return say($('loginMsg'),'err','Username, repo aur token required hain.');
+  if(!cfg.owner || !cfg.repo || !cfg.token) return say($('loginMsg'),'err','Username, repository and token are required.');
   say($('loginMsg'),'info','Connecting…');
   try{
-    const res = await loadFromGitHub();
+    const source = await loadData();
     const store = $('remember').checked ? localStorage : sessionStorage;
     localStorage.removeItem('hub-admin'); sessionStorage.removeItem('hub-admin');
     try{ store.setItem('hub-admin', JSON.stringify(cfg)); }catch(_){}
-    $('login').style.display = 'none';
-    $('app').style.display = 'block';
+    $('login').style.display  = 'none';
+    $('app').style.display    = 'block';
     $('logout').style.display = '';
     renderRows(); setDirty(false);
-    if(res === 'sheet') say($('appMsg'),'ok','✓ Google Sheet se latest data load hua.');
-    else if(res === 'json') say($('appMsg'),'info','Sheet load nahi hua, projects.json se data aaya.');
-    else say($('appMsg'),'info','Koi data nahi mila. Projects add karke publish karo.');
+    if(source === 'sheet') say($('appMsg'),'ok','✓ Latest data loaded from Google Sheet.');
+    else if(source === 'json') say($('appMsg'),'info','Sheet unavailable — data loaded from projects.json.');
+    else say($('appMsg'),'info','No data found. Add projects and publish.');
   }catch(e){ say($('loginMsg'),'err', e.message); }
 };
 
 $('logout').onclick = () => {
-  localStorage.removeItem('hub-admin'); sessionStorage.removeItem('hub-admin');
+  localStorage.removeItem('hub-admin');
+  sessionStorage.removeItem('hub-admin');
   location.reload();
 };
 
-window.addEventListener('beforeunload', e => { if(dirty){ e.preventDefault(); e.returnValue=''; } });
+window.addEventListener('beforeunload', e => { if(dirty){ e.preventDefault(); e.returnValue = ''; } });
 
-// ─── TABLE ───
+// ── TABLE ──
 function renderRows(){
   $('count').textContent = `(${projects.length})`;
-  $('rows').innerHTML = projects.map((p,i) => `
+  $('rows').innerHTML = projects.map((p, i) => `
     <tr>
       <td><b>${esc(p.id)}</b></td>
       <td>${esc(p.name)}</td>
       <td class="hide-m">${esc(p.leader)}</td>
-      <td><span class="st ${esc(p.status)}">${statusLabel[p.status]||esc(p.status)}</span></td>
-      <td class="hide-m">${p.progress||0}%</td>
+      <td><span class="st ${esc(p.status)}">${statusLabel[p.status] || esc(p.status)}</span></td>
+      <td class="hide-m">${p.progress || 0}%</td>
       <td class="acts">
         <button class="btn" style="padding:5px 10px;font-size:13px" data-edit="${i}">Edit</button>
       </td>
-    </tr>`).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--soft);padding:30px">Koi project nahi. "Add Project" dabao.</td></tr>';
+    </tr>`).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--soft);padding:30px">No projects yet. Click "Add Project".</td></tr>';
 }
 
 $('rows').onclick = e => {
@@ -342,7 +331,7 @@ $('rows').onclick = e => {
   if(ed !== undefined) openForm(+ed);
 };
 
-// ─── FORM ───
+// ── FORM ──
 $('f_progress').oninput = () => {
   $('pv').textContent = $('f_progress').value;
   $('progressBar').style.width = $('f_progress').value + '%';
@@ -350,7 +339,7 @@ $('f_progress').oninput = () => {
 
 function nextId(){
   const nums = projects.map(p => parseInt(String(p.id).replace(/\D/g,''))).filter(Number.isFinite);
-  return 'P-' + String((nums.length ? Math.max(...nums) : 0) + 1).padStart(2,'0');
+  return 'P-' + String((nums.length ? Math.max(...nums) : 0) + 1).padStart(2, '0');
 }
 
 function openForm(i){
@@ -359,38 +348,38 @@ function openForm(i){
     ? {id:nextId(), status:'pending', progress:0, mentor:'Priyanka Bhatele Mam', stack:[], members:[]}
     : projects[i];
 
-  $('dlgTitle').textContent = i === null ? 'Add Project' : 'Edit Project';
-  $('f_id').value       = p.id || '';
-  $('f_name').value     = p.name || '';
-  $('f_desc').value     = p.desc || '';
-  $('f_stack').value    = Array.isArray(p.stack) ? p.stack.join(', ') : (p.stack||'');
-  $('f_status').value   = p.status || 'pending';
-  $('f_progress').value = p.progress || 0;
-  $('pv').textContent   = p.progress || 0;
-  $('progressBar').style.width = (p.progress||0) + '%';
-  $('f_leader').value   = p.leader || '';
-  $('f_mentor').value   = p.mentor || 'Priyanka Bhatele Mam';
-  $('f_members').value  = Array.isArray(p.members) ? p.members.join(', ') : (p.members||'');
-  $('f_repo').value     = p.repo === '#' ? '' : (p.repo||'');
-  $('f_live').value     = p.liveLink || '';
+  $('dlgTitle').textContent   = i === null ? 'Add Project' : 'Edit Project';
+  $('f_id').value             = p.id       || '';
+  $('f_name').value           = p.name     || '';
+  $('f_desc').value           = p.desc     || '';
+  $('f_stack').value          = Array.isArray(p.stack)   ? p.stack.join(', ')   : (p.stack   || '');
+  $('f_status').value         = p.status   || 'pending';
+  $('f_progress').value       = p.progress || 0;
+  $('pv').textContent         = p.progress || 0;
+  $('progressBar').style.width = (p.progress || 0) + '%';
+  $('f_leader').value         = p.leader   || '';
+  $('f_mentor').value         = p.mentor   || 'Priyanka Bhatele Mam';
+  $('f_members').value        = Array.isArray(p.members) ? p.members.join(', ') : (p.members || '');
+  $('f_repo').value           = p.repo === '#' ? '' : (p.repo || '');
+  $('f_live').value           = p.liveLink || '';
 
   $('deleteBtn').style.display = i === null ? 'none' : '';
   $('formMsg').className = 'msg';
   $('dlg').showModal();
 }
 
-$('addBtn').onclick  = () => openForm(null);
+$('addBtn').onclick   = () => openForm(null);
 $('cancelBtn').onclick = () => $('dlg').close();
 
 $('deleteBtn').onclick = () => {
-  if(!confirm(`"${projects[editing].name}" delete karna chahte ho?`)) return;
+  if(!confirm(`Delete "${projects[editing].name}"?`)) return;
   projects.splice(editing, 1);
   $('dlg').close();
   renderRows();
   setDirty(true);
 };
 
-const csvList = s => s.split(',').map(x=>x.trim()).filter(Boolean);
+const csvList = s => s.split(',').map(x => x.trim()).filter(Boolean);
 
 $('form').addEventListener('submit', () => {
   const p = {
@@ -407,9 +396,8 @@ $('form').addEventListener('submit', () => {
     liveLink: $('f_live').value.trim()
   };
 
-  if(projects.some((x,i) => x.id === p.id && i !== editing)){
-    $('formMsg').className = 'msg err';
-    $('formMsg').textContent = `ID "${p.id}" already use ho raha hai.`;
+  if(projects.some((x, i) => x.id === p.id && i !== editing)){
+    say($('formMsg'), 'err', `ID "${p.id}" is already in use. Choose a different ID.`);
     return;
   }
 
@@ -420,7 +408,7 @@ $('form').addEventListener('submit', () => {
   setDirty(true);
 });
 
-// ─── PUBLISH (GitHub + Sheet) ───
+// ── PUBLISH (GitHub + Sheet) ──
 function showSync(ghOk, shOk){
   const gh = $('ghStatus'), sh = $('shStatus');
   gh.style.display = ''; sh.style.display = '';
@@ -434,62 +422,168 @@ $('publish').onclick = async () => {
   $('publish').disabled = true;
   $('ghStatus').style.display = 'none';
   $('shStatus').style.display = 'none';
-  say($('appMsg'),'info','Publishing…');
+  say($('appMsg'), 'info', 'Publishing…');
 
   let ghOk = false, shOk = false;
 
-  // 1. GitHub update
+  // Step 1: Update GitHub
   try{
     const body = {
       message: `Update projects (${projects.length}) via admin`,
       content: b64enc(JSON.stringify(projects, null, 2) + '\n'),
-      branch: cfg.branch
+      branch:  cfg.branch
     };
     if(sha) body.sha = sha;
-    const r = await api(FILE, {method:'PUT', body: JSON.stringify(body)});
-    if(r.status === 409 || r.status === 422) throw new Error('File GitHub par change ho gayi. Export karke reconnect karo.');
-    if(r.status === 401 || r.status === 403) throw new Error('Token mein "Contents: Read and write" permission nahi hai.');
+    const r = await githubApi(FILE, {method:'PUT', body: JSON.stringify(body)});
+    if(r.status === 409 || r.status === 422) throw new Error('File changed on GitHub since you opened this page. Export your data, disconnect, reconnect and try again.');
+    if(r.status === 401 || r.status === 403)  throw new Error('Token missing "Contents: Read and write" permission.');
     if(!r.ok) throw new Error('GitHub error ' + r.status);
     sha = (await r.json()).content.sha;
     ghOk = true;
   }catch(e){
-    say($('appMsg'),'err', '⚠ GitHub: ' + e.message);
+    say($('appMsg'), 'err', '⚠ GitHub: ' + e.message);
     showSync(false, false);
     $('publish').disabled = false;
     return;
   }
 
-  // 2. Google Sheet update via Apps Script
+  // Step 2: Update Google Sheet via Apps Script
   try{
     const r = await fetch(APPS_SCRIPT_URL, {
-      method: 'POST',
-      body: JSON.stringify(projects),
+      method:  'POST',
+      body:    JSON.stringify(projects),
       headers: {'Content-Type': 'text/plain'}
     });
     const d = await r.json();
     if(d.ok) shOk = true;
-    else throw new Error(d.error || 'Apps Script error');
+    else throw new Error(d.error || 'Apps Script returned an error.');
   }catch(e){
     console.warn('Sheet update failed:', e.message);
-    // GitHub update hua, Sheet nahi — partial success
   }
 
   showSync(ghOk, shOk);
   setDirty(false);
 
   if(ghOk && shOk){
-    say($('appMsg'),'ok','✅ GitHub aur Google Sheet dono update ho gaye! Site 1-2 min mein live hogi.');
-  } else if(ghOk){
-    say($('appMsg'),'ok','✅ GitHub update ho gaya. ⚠ Sheet update nahi hua — Apps Script check karo.');
+    say($('appMsg'), 'ok', '✅ GitHub and Google Sheet both updated! Site will go live in 1–2 minutes.');
+  } else {
+    say($('appMsg'), 'ok', '✅ GitHub updated. ⚠ Sheet sync failed — check Apps Script.');
   }
 };
 
-// ─── EXPORT ───
-$('exportBtn').onclick = () => {
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([JSON.stringify(projects,null,2)],{type:'application/json'}));
-  a.download = FILE; a.click(); URL.revokeObjectURL(a.href);
+// ── REFRESH FROM SHEET ──
+$('refreshBtn').onclick = async () => {
+  if(dirty && !confirm('You have unpublished changes. Refresh will discard them. Continue?')) return;
+  $('refreshBtn').textContent = '↻ Refreshing…';
+  $('refreshBtn').disabled = true;
+  try{
+    const r = await fetch(APPS_SCRIPT_URL + '?action=read');
+    if(!r.ok) throw new Error('Apps Script request failed.');
+    const d = await r.json();
+    if(d.ok && Array.isArray(d.projects) && d.projects.length){
+      projects = d.projects;
+      renderRows();
+      setDirty(false);
+      say($('appMsg'), 'ok', '✓ Data refreshed from Google Sheet.');
+    } else {
+      throw new Error(d.error || 'No data returned from Sheet.');
+    }
+  }catch(e){
+    say($('appMsg'), 'err', '⚠ Refresh failed: ' + e.message);
+  }
+  $('refreshBtn').textContent = '↻ Refresh from Sheet';
+  $('refreshBtn').disabled = false;
 };
+
+// ── EXPORT DROPDOWN ──
+const exportMenu = $('exportMenu');
+$('exportBtn').onclick = e => { e.stopPropagation(); exportMenu.style.display = exportMenu.style.display === 'none' ? 'block' : 'none'; };
+document.addEventListener('click', () => exportMenu.style.display = 'none');
+
+document.querySelectorAll('.export-opt').forEach(btn => {
+  btn.addEventListener('click', () => {
+    exportMenu.style.display = 'none';
+    const type = btn.dataset.type;
+    if(type === 'json') exportJSON();
+    else if(type === 'csv') exportCSV();
+    else if(type === 'pdf') exportPDF();
+  });
+});
+
+function exportJSON(){
+  const a = document.createElement('a');
+  a.href     = URL.createObjectURL(new Blob([JSON.stringify(projects, null, 2)], {type:'application/json'}));
+  a.download = 'projects.json';
+  a.click(); URL.revokeObjectURL(a.href);
+}
+
+function exportCSV(){
+  const headers = ['ID','Project Name','Description','Tech Stack','Status','Progress','Leader','Members','Mentor','Repository','Live Link'];
+  const rows = projects.map(p => [
+    p.id, p.name, p.desc,
+    Array.isArray(p.stack)   ? p.stack.join(' | ')   : p.stack,
+    p.status, p.progress + '%', p.leader,
+    Array.isArray(p.members) ? p.members.join(' | ') : p.members,
+    p.mentor, p.repo, p.liveLink || ''
+  ].map(v => `"${String(v).replace(/"/g,'""')}"`).join(','));
+  const csv = [headers.join(','), ...rows].join('\n');
+  const a = document.createElement('a');
+  a.href     = URL.createObjectURL(new Blob([csv], {type:'text/csv'}));
+  a.download = 'projects.csv';
+  a.click(); URL.revokeObjectURL(a.href);
+}
+
+function exportPDF(){
+  const statusLabel2 = {done:'Completed', progress:'In Progress', pending:'Not Started'};
+  const statusColor  = {done:'#2F7D4F',   progress:'#B07F17',     pending:'#B4472A'};
+  const statusBg     = {done:'#E4F0E8',   progress:'#F6EDD9',     pending:'#F5E4DE'};
+
+  const rows = projects.map((p,i) => `
+    <tr style="background:${i%2===0?'#fff':'#F8FAFC'}">
+      <td style="font-weight:600;color:#1F6F78">${p.id}</td>
+      <td><b>${p.name}</b><br><small style="color:#4C5A67">${p.desc||''}</small></td>
+      <td style="color:#4C5A67;font-size:12px">${Array.isArray(p.stack)?p.stack.join(', '):p.stack||'—'}</td>
+      <td>
+        <span style="background:${statusBg[p.status]||'#eee'};color:${statusColor[p.status]||'#333'};padding:3px 8px;border-radius:99px;font-size:12px;font-weight:600">
+          ${statusLabel2[p.status]||p.status}
+        </span>
+      </td>
+      <td>
+        <div style="background:#e0e0e0;border-radius:99px;height:8px;width:80px;overflow:hidden">
+          <div style="background:${statusColor[p.status]||'#1F6F78'};width:${p.progress||0}%;height:100%"></div>
+        </div>
+        <small style="color:#4C5A67">${p.progress||0}%</small>
+      </td>
+      <td>${p.leader||'—'}</td>
+      <td style="font-size:12px;color:#4C5A67">${Array.isArray(p.members)?p.members.join(', '):p.members||'—'}</td>
+    </tr>`).join('');
+
+  const html = `<!DOCTYPE html><html><head><meta charset="UTF-8">
+  <title>AIML Project Hub — Report</title>
+  <style>
+    body{font-family:'Segoe UI',Arial,sans-serif;margin:0;padding:32px;color:#141F2B}
+    h1{font-size:26px;margin:0 0 4px;color:#101A25}
+    .sub{color:#4C5A67;font-size:14px;margin:0 0 24px}
+    table{width:100%;border-collapse:collapse;font-size:13px}
+    th{background:#101A25;color:#fff;padding:10px 12px;text-align:left;font-size:12px;font-weight:600}
+    td{padding:10px 12px;border-bottom:1px solid #E0E7ED;vertical-align:top}
+    .footer{margin-top:24px;font-size:12px;color:#8493A0;text-align:right}
+    @media print{body{padding:0}}
+  </style></head><body>
+  <h1>AIML Project Hub</h1>
+  <p class="sub">Mentor: Priyanka Bhatele Mam &nbsp;|&nbsp; Total Projects: ${projects.length} &nbsp;|&nbsp; Generated: ${new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'})}</p>
+  <table>
+    <thead><tr><th>ID</th><th>Project</th><th>Tech Stack</th><th>Status</th><th>Progress</th><th>Leader</th><th>Members</th></tr></thead>
+    <tbody>${rows}</tbody>
+  </table>
+  <div class="footer">AIML Department · Class Project Report</div>
+  <scr'+'ipt>window.onload=()=>{window.print()}</scr'+'ipt>
+  </body></html>`;
+
+  const w = window.open('','_blank');
+  w.document.write(html);
+  w.document.close();
+}
 </script>
 </body>
 </html>

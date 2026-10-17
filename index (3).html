@@ -415,12 +415,70 @@ $('hero').addEventListener('mouseleave', () => mouse = {x:-999, y:-999});
 addEventListener('resize', resize);
 
 resize(); draw();
-// Data comes from projects.json (edited via admin.html); the array above is the offline fallback.
-fetch('projects.json?v=' + Date.now())
-  .then(r => { if(!r.ok) throw 0; return r.json(); })
-  .then(d => { if(Array.isArray(d) && d.length) projects = d; })
-  .catch(() => {})
-  .finally(() => { renderChips(); render(); updateStats(); });
+
+// ── Data loading: Google Sheet CSV → projects.json fallback → inline fallback ──
+const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRe2a8KLuGyJGkRuqjbFJNTuWsBJdrt826VL76nen8LZprzz5U4qlgCWDf5WZxoybNDl-UD09bKNDAc/pub?gid=1225773506&single=true&output=csv';
+
+function parseCSV(text){
+  const lines = text.trim().split(/\r?\n/);
+  const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+  return lines.slice(1).map(row => {
+    // Handle quoted fields with commas inside
+    const cols = []; let cur = '', inQ = false;
+    for(let i = 0; i < row.length; i++){
+      const c = row[i];
+      if(c === '"'){ inQ = !inQ; }
+      else if(c === ',' && !inQ){ cols.push(cur.trim()); cur = ''; }
+      else cur += c;
+    }
+    cols.push(cur.trim());
+    const obj = {};
+    headers.forEach((h, i) => obj[h] = (cols[i] || '').replace(/^"|"$/g,'').trim());
+    return obj;
+  }).filter(p => p.name);
+}
+
+function csvToProjects(rows){
+  return rows.map(r => ({
+    id:       r.id || 'P-??',
+    name:     r.name || '',
+    desc:     r.desc || '',
+    stack:    r.stack ? r.stack.split(',').map(x=>x.trim()).filter(Boolean) : [],
+    status:   ['done','progress','pending'].includes(r.status) ? r.status : 'pending',
+    progress: Math.min(100, Math.max(0, parseInt(r.progress) || 0)),
+    leader:   r.leader || '',
+    members:  r.members ? r.members.split(',').map(x=>x.trim()).filter(Boolean) : [],
+    mentor:   r.mentor || 'Priyanka Bhatele Mam',
+    repo:     r.repo && r.repo !== '#' ? r.repo : '#',
+    liveLink: r.livelink || ''
+  }));
+}
+
+async function loadData(){
+  // 1. Try Google Sheet CSV
+  try {
+    const r = await fetch(SHEET_CSV + '&t=' + Date.now());
+    if(r.ok){
+      const text = await r.text();
+      const rows = parseCSV(text);
+      if(rows.length){ projects = csvToProjects(rows); return 'sheet'; }
+    }
+  } catch(_){}
+  // 2. Try projects.json
+  try {
+    const r = await fetch('projects.json?v=' + Date.now());
+    if(r.ok){ const d = await r.json(); if(Array.isArray(d) && d.length){ projects = d; return 'json'; } }
+  } catch(_){}
+  // 3. Inline fallback
+  return 'inline';
+}
+
+loadData().then(src => {
+  renderChips(); render(); updateStats();
+  if(src === 'sheet') console.log('✓ Data loaded from Google Sheet');
+  else if(src === 'json') console.log('✓ Data loaded from projects.json');
+  else console.log('⚠ Using inline fallback data');
+});
 </script>
 </body>
 </html>

@@ -417,30 +417,44 @@ addEventListener('resize', resize);
 resize(); draw();
 
 // ── Data loading: Google Sheet CSV → projects.json fallback → inline fallback ──
-// Fetch data from Apps Script (reads Google Sheet directly — no CORS proxy needed)
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxl2IW0K8FFsNRmgGuZkxMkK1-7CgIFpGyDbvLLQR85qDNBCTNYgsoFVpxPojjDI8eZtw/exec';
 
+// Step 1: Show projects.json immediately (fast, cached by GitHub CDN)
+// Step 2: Silently refresh from Sheet in background — update UI if data changed
 async function loadData(){
-  // 1. Try Apps Script (direct Sheet access, no CORS issues)
+  // Fast load from projects.json
+  try{
+    const r = await fetch('projects.json?v=' + Date.now());
+    if(r.ok){
+      const d = await r.json();
+      if(Array.isArray(d) && d.length){ projects = d; }
+    }
+  }catch(_){}
+
+  // Show whatever we have immediately
+  renderChips(); render(); updateStats();
+  console.log('✓ Fast load from projects.json');
+
+  // Background refresh from Sheet (Apps Script)
   try{
     const r = await fetch(APPS_SCRIPT_URL + '?action=read');
     if(r.ok){
       const d = await r.json();
       if(d.ok && Array.isArray(d.projects) && d.projects.length){
-        projects = d.projects;
-        return 'sheet';
+        const changed = JSON.stringify(d.projects) !== JSON.stringify(projects);
+        if(changed){
+          projects = d.projects;
+          renderChips(); render(); updateStats();
+          console.log('✓ Updated from Google Sheet');
+        } else {
+          console.log('✓ Sheet data matches, no update needed');
+        }
       }
     }
-  }catch(_){}
-  // 2. Inline fallback
-  return 'inline';
+  }catch(_){ console.log('⚠ Sheet refresh skipped'); }
 }
 
-loadData().then(src => {
-  renderChips(); render(); updateStats();
-  if(src === 'sheet') console.log('✓ Data loaded from Google Sheet');
-  else console.log('⚠ Using inline fallback data');
-});
+loadData();
 </script>
 </body>
 </html>

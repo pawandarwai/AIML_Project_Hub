@@ -141,15 +141,15 @@
     "stack": [
       "TBD"
     ],
-    "status": "pending",
+    "status": "progress",
     "progress": 0,
-    "leader": "Aastha",
-    "members": [
-      "Akansha",
-      "Nikhil",
-      "Vaishali"
-    ],
+    "leader": "Nikil Sonwane",
     "mentor": "Priyanka Bhatele Mam",
+    "members": [
+      "Ashutosh Pershai",
+      "Divya",
+      "Vaishnavi"
+    ],
     "repo": "#",
     "liveLink": ""
   },

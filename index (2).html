@@ -73,6 +73,8 @@ h1 em{font-style:normal;background:linear-gradient(100deg,#E7C26A,#C89B3C 55%,#7
 .chip:hover{border-color:var(--teal)}
 .chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
 select{font:500 13px var(--body);padding:9px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);cursor:pointer}
+.sticky-row{display:contents}
+.search{order:1}.filters{order:2}select{order:3}
 .count{font-size:13px;color:var(--faint);margin:6px 0 0}
 
 /* CARDS */
@@ -132,6 +134,16 @@ footer .contact{font-family:var(--mono);color:var(--gold)}
   .ledger-grid{grid-template-columns:repeat(2,1fr)}
   .cell:nth-child(3){border-left:none} .cell:nth-child(n+3){border-top:1px solid var(--line)}
   .topbar{margin-bottom:36px} .search kbd{display:none}
+  /* Phones: only search + sort stay pinned; chips scroll away with the page */
+  .controls{display:contents}
+  .sticky-row{display:flex;gap:10px;align-items:center;position:sticky;top:0;z-index:20;background:var(--bg);margin:0 -28px;padding:10px 28px;margin-top:12px}
+  .search{flex:1 1 0;max-width:none;min-width:0}
+  select{flex:0 0 auto;max-width:42%}
+  .filters{flex-wrap:nowrap;overflow-x:auto;gap:6px;padding:2px 28px 6px;margin:0 -28px;scrollbar-width:none}
+  .filters::-webkit-scrollbar{display:none}
+  .chip{flex:0 0 auto;padding:7px 12px;font-size:12.5px;white-space:nowrap}
+  .search input{padding:10px 12px 10px 34px;font-size:13.5px}
+  .grid{padding-top:12px}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
 </style>
@@ -169,17 +181,19 @@ footer .contact{font-family:var(--mono);color:var(--gold)}
 
 <main class="wrap">
   <div class="controls">
+    <div class="sticky-row">
     <div class="search">
       <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
       <input type="text" id="searchInput" placeholder="Search project, leader or tech…" aria-label="Search projects">
       <kbd>/</kbd>
     </div>
-    <div class="filters" id="filterGroup"></div>
     <select id="sortSel" aria-label="Sort projects">
       <option value="id">Sort: Project ID</option>
       <option value="progress">Sort: Most progress</option>
       <option value="name">Sort: Name A–Z</option>
     </select>
+    </div>
+    <div class="filters" id="filterGroup"></div>
   </div>
   <p class="count" id="resultCount"></p>
   <div class="grid" id="grid"></div>

@@ -418,17 +418,26 @@ addEventListener('resize', resize);
 resize(); draw();
 
 // ── Data loading: Google Sheet CSV → projects.json fallback → inline fallback ──
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxl2IW0K8FFsNRmgGuZkxMkK1-7CgIFpGyDbvLLQR85qDNBCTNYgsoFVpxPojjDI8eZtw/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz8CUdFwg3lNr1ast4UMvyr7_NzDUA7OuQd5LHMRKQ7o8r1Z6PkxsZro7euptI4g4OTEg/exec';
 
 // Step 1: Show projects.json immediately (fast, cached by GitHub CDN)
 // Step 2: Silently refresh from Sheet in background — update UI if data changed
+// Accepts old (done/progress/pending) and new (Completed/In Progress/Not Started) values
+const normStatus = v => {
+  v = String(v || '').trim().toLowerCase();
+  return (v === 'completed' || v === 'done') ? 'Completed'
+       : (v === 'in progress' || v === 'progress') ? 'In Progress' : 'Not Started';
+};
+const normAll = list => list.map(p => ({...p, status: normStatus(p.status)}));
+projects = normAll(projects);
+
 async function loadData(){
   // Fast load from projects.json
   try{
     const r = await fetch('projects.json?v=' + Date.now());
     if(r.ok){
       const d = await r.json();
-      if(Array.isArray(d) && d.length){ projects = d; }
+      if(Array.isArray(d) && d.length){ projects = normAll(d); }
     }
   }catch(_){}
 
@@ -442,9 +451,10 @@ async function loadData(){
     if(r.ok){
       const d = await r.json();
       if(d.ok && Array.isArray(d.projects) && d.projects.length){
-        const changed = JSON.stringify(d.projects) !== JSON.stringify(projects);
+        const fresh = normAll(d.projects);
+        const changed = JSON.stringify(fresh) !== JSON.stringify(projects);
         if(changed){
-          projects = d.projects;
+          projects = fresh;
           renderChips(); render(); updateStats();
           console.log('✓ Updated from Google Sheet');
         } else {

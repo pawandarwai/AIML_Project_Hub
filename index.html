@@ -251,7 +251,8 @@ let projects = [
 
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const label = { done:'Completed', progress:'In Progress', pending:'Not Started' };
+const label = { 'Completed':'Completed', 'In Progress':'In Progress', 'Not Started':'Not Started', done:'Completed', progress:'In Progress', pending:'Not Started' };
+const cssClass = st => st === 'Completed' ? 'done' : st === 'In Progress' ? 'progress' : 'pending';
 const palette = ['#1F6F78','#B4472A','#6B5CA5','#2F7D4F','#C07A1B','#3B6FB6'];
 const initials = n => n.trim().split(/\s+/).map(w => w[0]).slice(0,2).join('').toUpperCase();
 const color = n => palette[[...n].reduce((a,c) => a + c.charCodeAt(0), 0) % palette.length];
@@ -261,7 +262,7 @@ let activeFilter = 'all', lastFocus = null;
 
 function renderChips(){
   const n = s => s === 'all' ? projects.length : projects.filter(p => p.status === s).length;
-  $('filterGroup').innerHTML = [['all','All'],['done','Completed'],['progress','In Progress'],['pending','Not Started']]
+  $('filterGroup').innerHTML = [['all','All'],['Completed','Completed'],['In Progress','In Progress'],['Not Started','Not Started']]
     .map(([k,t]) => `<button class="chip" data-filter="${k}" aria-pressed="${k===activeFilter}">${t}<small>${n(k)}</small></button>`).join('');
 }
 
@@ -276,12 +277,12 @@ function render(){
   $('grid').innerHTML = list.map((p,i) => {
     const team = [p.leader, ...p.members];
     return `
-    <article class="card ${p.status}" data-id="${p.id}" tabindex="0" role="button" aria-haspopup="dialog" style="animation-delay:${i*50}ms">
-      <div class="row"><span class="cid">${p.id}</span><span class="tag-status ${p.status}">${label[p.status]}</span></div>
+    <article class="card ${cssClass(p.status)}" data-id="${p.id}" tabindex="0" role="button" aria-haspopup="dialog" style="animation-delay:${i*50}ms">
+      <div class="row"><span class="cid">${p.id}</span><span class="tag-status ${cssClass(p.status)}">${label[p.status]||p.status}</span></div>
       <h3>${esc(p.name)}</h3>
       <p>${esc(p.desc)}</p>
       <div class="stack">${p.stack.map(t => `<span class="tag">${esc(t)}</span>`).join('')}</div>
-      <div class="prog-row"><div class="bar"><span class="${p.status}" style="width:${p.progress}%"></span></div>${p.progress}%</div>
+      <div class="prog-row"><div class="bar"><span class="${cssClass(p.status)}" style="width:${p.progress}%"></span></div>${p.progress}%</div>
       <div class="card-foot">
         <div class="row" style="gap:0">
           <div class="avatars">${team.slice(0,4).map(avatar).join('')}${team.length>4?`<span class="av more">+${team.length-4}</span>`:''}</div>
@@ -311,9 +312,9 @@ function openModal(id, from){
   $('mTitle').textContent = p.name;
   $('mDesc').textContent = p.desc;
   $('mStatus').textContent = label[p.status];
-  $('mStatus').className = 'tag-status ' + p.status;
+  $('mStatus').className = 'tag-status ' + cssClass(p.status);
   $('mPct').textContent = p.progress + '% complete';
-  $('mBar').className = p.status;
+  $('mBar').className = cssClass(p.status);
   $('mBar').style.width = '0';
   requestAnimationFrame(() => requestAnimationFrame(() => $('mBar').style.width = p.progress + '%'));
   $('mStack').innerHTML = p.stack.map(t => `<span class="tag">${esc(t)}</span>`).join('');

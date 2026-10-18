@@ -77,7 +77,7 @@ dialog::backdrop{background:rgba(10,18,28,.55)}
   <!-- LOGIN -->
   <section class="card" id="login">
     <h2>Connect to GitHub</h2>
-    <p class="hint">Publishing the changes will update both GitHub <b>and</b> Google Sheet.</p>
+    <p class="hint">Changes publish hone par GitHub <b>aur</b> Google Sheet dono update honge.</p>
     <div class="g2">
       <div><label>GitHub Username</label><input id="owner" placeholder="your-username"></div>
       <div><label>Repository Name</label><input id="repo" placeholder="aiml-project-hub"></div>
@@ -133,7 +133,7 @@ dialog::backdrop{background:rgba(10,18,28,.55)}
           <tbody id="rows"></tbody>
         </table>
       </div>
-      <p class="hint" style="margin-top:16px">💡 After publishing, GitHub Pages will update in 1-2 minutes and Google Sheet will update immediately.</p>
+      <p class="hint" style="margin-top:16px">💡 Publish karne ke baad GitHub Pages 1-2 min mein aur Google Sheet turant update hogi.</p>
     </div>
   </section>
 </main>
@@ -151,9 +151,9 @@ dialog::backdrop{background:rgba(10,18,28,.55)}
       <div>
         <label>Status</label>
         <select id="f_status">
-          <option value="pending">Not Started</option>
-          <option value="progress">In Progress</option>
-          <option value="done">Completed</option>
+          <option value="Not Started">Not Started</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Completed">Completed</option>
         </select>
       </div>
     </div>
@@ -207,12 +207,13 @@ dialog::backdrop{background:rgba(10,18,28,.55)}
 </dialog>
 
 <script>
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxl2IW0K8FFsNRmgGuZkxMkK1-7CgIFpGyDbvLLQR85qDNBCTNYgsoFVpxPojjDI8eZtw/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz8CUdFwg3lNr1ast4UMvyr7_NzDUA7OuQd5LHMRKQ7o8r1Z6PkxsZro7euptI4g4OTEg/exec';
 const FILE = 'projects.json';
 
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const statusLabel = {done:'Completed', progress:'In Progress', pending:'Not Started'};
+const statusLabel = {'Completed':'Completed','In Progress':'In Progress','Not Started':'Not Started',done:'Completed',progress:'In Progress',pending:'Not Started'};
+const cssClass = st => st==='Completed'?'done':st==='In Progress'?'progress':'pending';
 
 let projects = [], sha = null, dirty = false, editing = null, cfg = {};
 
@@ -318,7 +319,7 @@ function renderRows(){
       <td><b>${esc(p.id)}</b></td>
       <td>${esc(p.name)}</td>
       <td class="hide-m">${esc(p.leader)}</td>
-      <td><span class="st ${esc(p.status)}">${statusLabel[p.status] || esc(p.status)}</span></td>
+      <td><span class="st ${cssClass(p.status)}">${statusLabel[p.status]||esc(p.status)}</span></td>
       <td class="hide-m">${p.progress || 0}%</td>
       <td class="acts">
         <button class="btn" style="padding:5px 10px;font-size:13px" data-edit="${i}">Edit</button>
@@ -345,7 +346,7 @@ function nextId(){
 function openForm(i){
   editing = i;
   const p = i === null
-    ? {id:nextId(), status:'pending', progress:0, mentor:'Priyanka Bhatele Mam', stack:[], members:[]}
+    ? {id:nextId(), status:'Not Started', progress:0, mentor:'Priyanka Bhatele Mam', stack:[], members:[]}
     : projects[i];
 
   $('dlgTitle').textContent   = i === null ? 'Add Project' : 'Edit Project';
@@ -353,7 +354,7 @@ function openForm(i){
   $('f_name').value           = p.name     || '';
   $('f_desc').value           = p.desc     || '';
   $('f_stack').value          = Array.isArray(p.stack)   ? p.stack.join(', ')   : (p.stack   || '');
-  $('f_status').value         = p.status   || 'pending';
+  $('f_status').value         = p.status   || 'Not Started';
   $('f_progress').value       = p.progress || 0;
   $('pv').textContent         = p.progress || 0;
   $('progressBar').style.width = (p.progress || 0) + '%';
@@ -388,7 +389,7 @@ $('form').addEventListener('submit', () => {
     desc:     $('f_desc').value.trim() || 'Coming soon',
     stack:    csvList($('f_stack').value),
     status:   $('f_status').value,
-    progress: $('f_status').value === 'done' ? 100 : +$('f_progress').value,
+    progress: $('f_status').value === 'Completed' ? 100 : +$('f_progress').value,
     leader:   $('f_leader').value.trim(),
     mentor:   $('f_mentor').value.trim() || 'Priyanka Bhatele Mam',
     members:  csvList($('f_members').value),
@@ -534,9 +535,9 @@ function exportCSV(){
 }
 
 function exportPDF(){
-  const statusLabel2 = {done:'Completed', progress:'In Progress', pending:'Not Started'};
-  const statusColor  = {done:'#2F7D4F',   progress:'#B07F17',     pending:'#B4472A'};
-  const statusBg     = {done:'#E4F0E8',   progress:'#F6EDD9',     pending:'#F5E4DE'};
+  const statusLabel2 = {'Completed':'Completed','In Progress':'In Progress','Not Started':'Not Started',done:'Completed',progress:'In Progress',pending:'Not Started'};
+  const statusColor  = {'Completed':'#2F7D4F','In Progress':'#B07F17','Not Started':'#B4472A',done:'#2F7D4F',progress:'#B07F17',pending:'#B4472A'};
+  const statusBg     = {'Completed':'#E4F0E8','In Progress':'#F6EDD9','Not Started':'#F5E4DE',done:'#E4F0E8',progress:'#F6EDD9',pending:'#F5E4DE'};
 
   const rows = projects.map((p,i) => `
     <tr style="background:${i%2===0?'#fff':'#F8FAFC'}">

@@ -10,12 +10,12 @@
     "status": "progress",
     "progress": 40,
     "leader": "Pawan Darwai",
-    "mentor": "Priyanka Bhatele Mam",
     "members": [
       "Raj",
       "Anurag",
       "Harsh"
     ],
+    "mentor": "Priyanka Bhatele Mam",
     "repo": "#",
     "liveLink": ""
   },
@@ -26,15 +26,15 @@
     "stack": [
       "TBD"
     ],
-    "status": "pending",
+    "status": "progress",
     "progress": 0,
     "leader": "Vishal Verma",
+    "mentor": "Priyanka Bhatele Mam",
     "members": [
       "Rohit Thakre",
       "Nakul Bhoyar",
       "Alfej Mansuri"
     ],
-    "mentor": "Priyanka Bhatele Mam",
     "repo": "#",
     "liveLink": ""
   },

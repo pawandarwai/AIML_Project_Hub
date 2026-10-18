@@ -26,15 +26,15 @@
     "stack": [
       "TBD"
     ],
-    "status": "In Progress",
+    "status": "progress",
     "progress": 0,
     "leader": "Vishal Verma",
-    "mentor": "Priyanka Bhatele Mam",
     "members": [
       "Rohit Thakre",
       "Nakul Bhoyar",
       "Alfej Mansuri"
     ],
+    "mentor": "Priyanka Bhatele Mam",
     "repo": "#",
     "liveLink": ""
   },
@@ -66,12 +66,12 @@
     "status": "Not Started",
     "progress": 0,
     "leader": "Rohit Thakre",
+    "mentor": "Priyanka Bhatele Mam",
     "members": [
       "Eshaan",
-      "Diksha",
+      "Diksha Gour",
       "Anjali"
     ],
-    "mentor": "Priyanka Bhatele Mam",
     "repo": "#",
     "liveLink": ""
   },

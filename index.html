@@ -251,7 +251,7 @@ let projects = [
 
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const label = { done:'Completed', progress:'In progress', pending:'Not started' };
+const label = { done:'Completed', progress:'In Progress', pending:'Not Started' };
 const palette = ['#1F6F78','#B4472A','#6B5CA5','#2F7D4F','#C07A1B','#3B6FB6'];
 const initials = n => n.trim().split(/\s+/).map(w => w[0]).slice(0,2).join('').toUpperCase();
 const color = n => palette[[...n].reduce((a,c) => a + c.charCodeAt(0), 0) % palette.length];
@@ -261,7 +261,7 @@ let activeFilter = 'all', lastFocus = null;
 
 function renderChips(){
   const n = s => s === 'all' ? projects.length : projects.filter(p => p.status === s).length;
-  $('filterGroup').innerHTML = [['all','All'],['done','Completed'],['progress','In progress'],['pending','Not started']]
+  $('filterGroup').innerHTML = [['all','All'],['done','Completed'],['progress','In Progress'],['pending','Not Started']]
     .map(([k,t]) => `<button class="chip" data-filter="${k}" aria-pressed="${k===activeFilter}">${t}<small>${n(k)}</small></button>`).join('');
 }
 

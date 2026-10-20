@@ -10,12 +10,12 @@
     "status": "In Progress",
     "progress": 40,
     "leader": "Pawan Darwai",
-    "mentor": "Priyanka Bhatele Mam",
     "members": [
       "Raj",
       "Anurag",
       "Harsh"
     ],
+    "mentor": "Nishikant Sir",
     "repo": "#",
     "liveLink": ""
   },
@@ -48,11 +48,11 @@
     "status": "Not Started",
     "progress": 0,
     "leader": "Piyush Gurve",
-    "mentor": "Priyanka Bhatele Mam",
     "members": [
       "Saifali Thakur",
       "Rohit"
     ],
+    "mentor": "Priyanka Bhatele Mam",
     "repo": "#",
     "liveLink": ""
   },
@@ -366,10 +366,10 @@
     "status": "Not Started",
     "progress": 0,
     "leader": "Sanib",
+    "mentor": "Priyanka Bhatele Mam",
     "members": [
       "Rajat"
     ],
-    "mentor": "Priyanka Bhatele Mam",
     "repo": "#",
     "liveLink": ""
   }

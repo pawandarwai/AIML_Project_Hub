@@ -122,7 +122,8 @@
     ],
     "status": "Not Started",
     "progress": 0,
-    "leader": "Swati",
+    "leader": "Swati Parte",
+    "mentor": "Priyanka Bhatele Mam",
     "members": [
       "Shakhi",
       "Riya",
@@ -130,7 +131,6 @@
       "Shivani",
       "Suhani"
     ],
-    "mentor": "Priyanka Bhatele Mam",
     "repo": "#",
     "liveLink": ""
   },
@@ -366,10 +366,10 @@
     "status": "Not Started",
     "progress": 0,
     "leader": "Sanib",
-    "mentor": "Priyanka Bhatele Mam",
     "members": [
       "Rajat"
     ],
+    "mentor": "Priyanka Bhatele Mam",
     "repo": "#",
     "liveLink": ""
   }

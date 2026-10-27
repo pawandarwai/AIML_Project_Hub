@@ -48,11 +48,11 @@
     "status": "In Progress",
     "progress": 10,
     "leader": "Piyush Gurve",
-    "mentor": "Priyanka Bhatele Mam",
     "members": [
       "Saifali Thakur",
       "Rohit"
     ],
+    "mentor": "Priyanka Bhatele Mam",
     "repo": "#",
     "liveLink": ""
   },
@@ -63,15 +63,15 @@
     "stack": [
       "TBD"
     ],
-    "status": "Not Started",
-    "progress": 0,
+    "status": "In Progress",
+    "progress": 5,
     "leader": "Rohit Thakre",
+    "mentor": "Priyanka Bhatele Mam",
     "members": [
       "Eshaan",
       "Diksha Gour",
       "Anjali"
     ],
-    "mentor": "Priyanka Bhatele Mam",
     "repo": "#",
     "liveLink": ""
   },

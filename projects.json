@@ -1,7 +1,7 @@
 [
   {
     "id": "P-01",
-    "name": "TestAI",
+    "name": "E-toung",
     "desc": "It test automatically foods test",
     "stack": [
       "Backend Python",
@@ -10,12 +10,12 @@
     "status": "In Progress",
     "progress": 40,
     "leader": "Pawan Darwai",
+    "mentor": "Nishikant Sir",
     "members": [
       "Raj",
       "Anurag",
       "Harsh"
     ],
-    "mentor": "Nishikant Sir",
     "repo": "#",
     "liveLink": ""
   },
@@ -66,12 +66,12 @@
     "status": "In Progress",
     "progress": 5,
     "leader": "Rohit Thakre",
-    "mentor": "Priyanka Bhatele Mam",
     "members": [
       "Eshaan",
       "Diksha Gour",
       "Anjali"
     ],
+    "mentor": "Priyanka Bhatele Mam",
     "repo": "#",
     "liveLink": ""
   },

@@ -1,376 +1,507 @@
 [
   {
     "id": "P-01",
-    "name": "E-toung",
-    "desc": "It test automatically foods test",
+    "name": "E-Tongue",
+    "desc": "Build a low-cost, automated system that measures and classifies taste profiles (sweet, sour, salty, bitter, umami) or detects liquid adulteration.",
     "stack": [
-      "Backend Python",
-      "Frontend HTML"
+      "Domain: IoT",
+      "ML",
+      "Data Science/Data Analytics | Front-End: HTML",
+      "CSS",
+      "JavaScript | Back-End: Python",
+      "Flask Framework | Database: MongoDB"
     ],
     "status": "In Progress",
     "progress": 40,
     "leader": "Pawan Darwai",
-    "mentor": "Nishikant Sir",
     "members": [
-      "Raj",
-      "Anurag",
-      "Harsh"
+      "Anurag Malviya",
+      "Harsh Charpe",
+      "Raj Bisen"
     ],
+    "mentor": "Dr. Priyanka Bhatele",
     "repo": "#",
-    "liveLink": ""
+    "liveLink": "#"
   },
   {
     "id": "P-02",
-    "name": "Deep Crop",
-    "desc": "Coming soon",
+    "name": "ImageNet Implementation",
+    "desc": "Implementation of a Convolutional Neural Network (CNN) architecture similar to AlexNet for deep learning image classification on ImageNet dataset.",
     "stack": [
-      "TBD"
+      "Domain: Machine Learning",
+      "Deep Learning (CNN) | Front-End: N/A | Back-End: Python | Database: N/A"
     ],
     "status": "In Progress",
-    "progress": 10,
-    "leader": "Vishal Verma",
+    "progress": 25,
+    "leader": "Eshan Shrivastava",
+    "mentor": "Dr. Priyanka Bhatele",
     "members": [
-      "Rohit Thakre",
-      "Nakul Bhoyar",
-      "Alfej Mansuri"
+      "Anjali Hada",
+      "Diksha Gaur",
+      "Chanchal Garhwal"
     ],
-    "mentor": "Priyanka Bhatele Mam",
     "repo": "#",
-    "liveLink": ""
+    "liveLink": "#"
   },
   {
     "id": "P-03",
-    "name": "SISTec College Dropout System",
-    "desc": "Coming soon",
+    "name": "Student Performance Prediction",
+    "desc": "A predictive machine learning application that analyzes relevant academic factors and historical student data to forecast performance before examinations.",
     "stack": [
-      "TBD"
+      "Domain: Web Development",
+      "ML",
+      "Data Analytics | Front-End: HTML",
+      "CSS",
+      "JavaScript",
+      "React & Angular | Back-End: Python",
+      "Flask Framework | Database: MySQL"
     ],
     "status": "In Progress",
     "progress": 10,
     "leader": "Piyush Gurve",
     "members": [
-      "Saifali Thakur",
-      "Rohit"
+      "Rohit Thakre",
+      "Saifali Thakur"
     ],
-    "mentor": "Priyanka Bhatele Mam",
+    "mentor": "Dr. Priyanka Bhatele",
     "repo": "#",
-    "liveLink": ""
+    "liveLink": "#"
   },
   {
     "id": "P-04",
-    "name": "ImageNet Implementation",
-    "desc": "Coming soon",
+    "name": "Self Driving Car",
+    "desc": "Uses AI and computer vision to develop a self-driving car system that detects road lanes, identifies obstacles, and navigates autonomously within a simulated environment.",
     "stack": [
-      "TBD"
+      "Domain: AI",
+      "Computer Vision",
+      "ML | Front-End: HTML",
+      "CSS",
+      "JavaScript | Back-End: Python",
+      "NumPy",
+      "Scikit-learn",
+      "OpenCV | Database: SQLite"
     ],
     "status": "In Progress",
-    "progress": 5,
-    "leader": "Rohit Thakre",
+    "progress": 10,
+    "leader": "Riya Nahar",
     "members": [
-      "Eshaan",
-      "Diksha Gour",
-      "Anjali"
+      "Shakhi Dharsey",
+      "Swati Parte",
+      "Nandini Atarkar"
     ],
-    "mentor": "Priyanka Bhatele Mam",
+    "mentor": "Dr. Vandana Rai",
     "repo": "#",
-    "liveLink": ""
+    "liveLink": "#"
   },
   {
     "id": "P-05",
-    "name": "Face Recognition Attendance System (Liveness Detection)",
-    "desc": "Coming soon",
+    "name": "Sign Language & Emotion Recognition System [VIT]",
+    "desc": "Develop a computer vision-based system that recognizes sign language gestures and classifies facial expressions in real time using Vision Transformer (ViT) deep learning technique.",
     "stack": [
-      "TBD"
+      "Domain: Computer Vision",
+      "Deep Learning",
+      "ML",
+      "Web Dev | Front-End: HTML",
+      "CSS",
+      "JavaScript | Back-End: Python",
+      "Flask Framework | Database: MySQL"
     ],
-    "status": "Not Started",
-    "progress": 0,
-    "leader": "Anshay",
+    "status": "In Progress",
+    "progress": 10,
+    "leader": "Vishal Fulbandhe",
     "members": [
-      "Deepesh",
-      "Ansh",
-      "Shiwang",
-      "Nakul"
+      "Sarvesh Verma",
+      "Vishal Kadwe",
+      "Bhanu Pratap"
     ],
-    "mentor": "Priyanka Bhatele Mam",
+    "mentor": "Dr. Vandana Rai",
     "repo": "#",
-    "liveLink": ""
+    "liveLink": "#"
   },
   {
     "id": "P-06",
-    "name": "ML Model to Detect Humans in Self Driving Car VIT",
-    "desc": "Coming soon",
+    "name": "Bank ATM System Face Recognition",
+    "desc": "A secure banking ATM interface and authentication system incorporating facial recognition technology to automate safe and reliable user verification.",
     "stack": [
-      "TBD"
+      "Domain: Web Development",
+      "Machine Learning | Front-End: HTML",
+      "CSS",
+      "JavaScript | Back-End: Python",
+      "Java",
+      "Flask Framework | Database: MySQL"
     ],
-    "status": "Not Started",
-    "progress": 0,
-    "leader": "Vishal Fulbandhe",
+    "status": "In Progress",
+    "progress": 10,
+    "leader": "Sujal Rathore",
     "members": [
-      "Vishal Kadwe",
-      "Sarvesh"
+      "Yuvraj Rajput",
+      "Shubham Hanowad",
+      "Vishal Bhilala",
+      "Shivam Tiwari"
     ],
-    "mentor": "Priyanka Bhatele Mam",
+    "mentor": "Dr. Vandana Rai",
     "repo": "#",
-    "liveLink": ""
+    "liveLink": "#"
   },
   {
     "id": "P-07",
-    "name": "Not Given",
-    "desc": "Coming soon",
+    "name": "Software Prediction",
+    "desc": "A machine-learning based application that analyzes historical software metrics and project data to identify patterns and predict future outcomes.",
     "stack": [
-      "TBD"
+      "Domain: Machine Learning | Front-End: HTML",
+      "CSS",
+      "JavaScript | Back-End: Python",
+      "Flask Framework | Database: MySQL"
     ],
-    "status": "Not Started",
-    "progress": 0,
-    "leader": "Swati Parte",
+    "status": "In Progress",
+    "progress": 10,
+    "leader": "Ashutosh Pawsai",
     "members": [
-      "Shakhi",
-      "Riya",
-      "Nandini",
-      "Shivani",
-      "Suhani"
+      "Divya Nartekar",
+      "Vaishali Chachane"
     ],
-    "mentor": "Priyanka Bhatele Mam",
+    "mentor": "Mr. Kaushal Verma",
     "repo": "#",
-    "liveLink": ""
+    "liveLink": "#"
   },
   {
     "id": "P-08",
-    "name": "Software Prediction",
-    "desc": "Coming soon",
+    "name": "AI-Based Student Performance Prediction System",
+    "desc": "A machine learning-based system that predicts a student's academic performance before the examination based on historical and relevant performance data.",
     "stack": [
-      "TBD"
+      "Domain: Machine Learning",
+      "Data Science/ Analytics | Front-End: Python",
+      "Streamlit | Back-End: Python",
+      "Flask Framework | Database: SQLite"
     ],
-    "status": "Not Started",
-    "progress": 0,
-    "leader": "Nikil Sonwane",
+    "status": "In Progress",
+    "progress": 10,
+    "leader": "Shivani Singh",
     "members": [
-      "Ashutosh Pershai",
-      "Divya",
-      "Vaishnavi"
+      "Suhani Mewada",
+      "Aastha Singh",
+      "Akanksha Singh"
     ],
-    "mentor": "Priyanka Bhatele Mam",
+    "mentor": "Ms. Mayuri Soni",
     "repo": "#",
-    "liveLink": ""
+    "liveLink": "#"
   },
   {
     "id": "P-09",
-    "name": "Chatbot",
-    "desc": "Coming soon",
+    "name": "Software Prediction",
+    "desc": "Software prediction system that utilizes machine learning algorithms on development datasets to predict software defects and project success metrics.",
     "stack": [
-      "TBD"
+      "Domain: Web Development",
+      "ML",
+      "Data Analytics | Front-End: HTML",
+      "CSS",
+      "JavaScript | Back-End: Python",
+      "Flask Framework | Database: MySQL"
     ],
-    "status": "Not Started",
-    "progress": 0,
-    "leader": "Divya",
+    "status": "In Progress",
+    "progress": 10,
+    "leader": "Nikhil Sonwane",
     "members": [
-      "Ashutosh",
-      "Jayesh"
+      "Vaishali Chachane",
+      "Divya Nartekar"
     ],
-    "mentor": "Priyanka Bhatele Mam",
+    "mentor": "Ms. Khushboo Bharadwaj",
     "repo": "#",
-    "liveLink": ""
+    "liveLink": "#"
   },
   {
     "id": "P-10",
-    "name": "Tec Faculty and Student Greet Good Morning on Detection",
-    "desc": "Coming soon",
+    "name": "Face Recognition Attendance System",
+    "desc": "AI-based attendance system using face recognition and liveness detection for secure, automated student attendance logging.",
     "stack": [
-      "TBD"
+      "Domain: Web Development",
+      "Mobile App Development",
+      "ML | Front-End: HTML",
+      "CSS",
+      "JS",
+      "Bootstrap",
+      "React",
+      "Flutter | Back-End: Python",
+      "Flask Framework | Database: MySQL"
     ],
-    "status": "Not Started",
-    "progress": 0,
-    "leader": "Shivang",
+    "status": "In Progress",
+    "progress": 10,
+    "leader": "Ansh Malviya",
     "members": [
-      "Goutham"
+      "Atul Singh",
+      "Ashutosh Kumar",
+      "Deepesh Prajapat"
     ],
-    "mentor": "Priyanka Bhatele Mam",
+    "mentor": "Ms. Khushboo Bharadwaj",
     "repo": "#",
-    "liveLink": ""
+    "liveLink": "#"
   },
   {
     "id": "P-11",
-    "name": "Coming Soon",
-    "desc": "Coming soon",
+    "name": "YOLO (Greeting System)",
+    "desc": "A smart camera system using YOLO and facial recognition to identify SISTec faculty and students and greet them with personalized voice greetings.",
     "stack": [
-      "TBD"
+      "Domain: Computer Vision",
+      "Machine Learning | Front-End: YOLO",
+      "OpenCV",
+      "TTS (Text-to-Speech) | Back-End: Python",
+      "YOLO",
+      "OpenCV | Database: MySQL/SQL"
     ],
-    "status": "Not Started",
-    "progress": 0,
-    "leader": "Divyansh",
+    "status": "In Progress",
+    "progress": 10,
+    "leader": "Divyansh Kelodiya",
     "members": [
-      "Amit Nagar"
+      "Shivang Maheshwari",
+      "Amit Nagar",
+      "Chaitanya Dangoliya"
     ],
-    "mentor": "Priyanka Bhatele Mam",
+    "mentor": "Ms. Priyanka Saxena",
     "repo": "#",
-    "liveLink": ""
+    "liveLink": "#"
   },
   {
     "id": "P-12",
-    "name": "Hate Speech Audio Speeches",
-    "desc": "Coming soon",
+    "name": "Hate Speech Audio Speeches Detection",
+    "desc": "An AI/ML-based system that detects hate speech in audio recordings using speech recognition, NLP, and machine learning to classify speech into hate, offensive, or non-hate speech.",
     "stack": [
-      "TBD"
+      "Domain: Web Development",
+      "Machine Learning",
+      "NLP | Front-End: HTML",
+      "CSS",
+      "JavaScript | Back-End: Python",
+      "Flask Framework | Database: MySQL"
     ],
-    "status": "Not Started",
-    "progress": 0,
-    "leader": "Devrat",
+    "status": "In Progress",
+    "progress": 10,
+    "leader": "Dev Vrat Payasi",
     "members": [
-      "Sandip",
-      "Chetan",
-      "Badal"
+      "Chetan Charpe",
+      "Somdeep Kumar Ahirwar"
     ],
-    "mentor": "Priyanka Bhatele Mam",
+    "mentor": "Ms. Priyanka Saxena",
     "repo": "#",
-    "liveLink": ""
+    "liveLink": "#"
   },
   {
     "id": "P-13",
     "name": "Smart Phone Based Driver Alert System",
-    "desc": "Coming soon",
+    "desc": "A mobile application designed to detect driver drowsiness using a smartphone camera and generate sound & vibration alerts to help prevent road accidents.",
     "stack": [
-      "TBD"
+      "Domain: Mobile App Development",
+      "ML",
+      "Computer Vision | Front-End: HTML",
+      "CSS",
+      "JavaScript",
+      "Mobile UI | Back-End: Python",
+      "Flask Framework | Database: MySQL"
     ],
-    "status": "Not Started",
-    "progress": 0,
-    "leader": "Vaishnavi",
+    "status": "In Progress",
+    "progress": 10,
+    "leader": "Sapna Sambare",
     "members": [
-      "Sapna",
-      "Sheetal",
-      "Shradha",
-      "Tilak"
+      "Sheetal Tilak",
+      "Vaishnavi Gurde",
+      "Shraddha Tilak"
     ],
-    "mentor": "Priyanka Bhatele Mam",
+    "mentor": "Ms. Priyanka Saxena",
     "repo": "#",
-    "liveLink": ""
+    "liveLink": "#"
   },
   {
     "id": "P-14",
-    "name": "Deepfake Goutham's Paper",
-    "desc": "Coming soon",
+    "name": "Deepfake Detection using AI, ML, DL",
+    "desc": "An AI-based application designed to identify manipulated images and videos using deep learning and computer vision, allowing users to upload files and predict real vs fake.",
     "stack": [
-      "TBD"
+      "Domain: AI",
+      "Machine Learning",
+      "Deep Learning",
+      "CV | Front-End: HTML",
+      "CSS",
+      "JavaScript | Back-End: Python",
+      "Flask Framework | Database: SQLite"
     ],
-    "status": "Not Started",
-    "progress": 0,
+    "status": "In Progress",
+    "progress": 10,
     "leader": "Mahi",
     "members": [
       "Archi",
       "Harshika",
       "Shivam"
     ],
-    "mentor": "Priyanka Bhatele Mam",
+    "mentor": "Mr. Kaushal Verma",
     "repo": "#",
-    "liveLink": ""
+    "liveLink": "#"
   },
   {
     "id": "P-15",
-    "name": "Phishing",
-    "desc": "Coming soon",
+    "name": "Phishing Website Detection using Machine Learning",
+    "desc": "A machine learning-based web application that detects phishing websites by analyzing URLs, classifying them as phishing or legitimate to help users identify suspicious links.",
     "stack": [
-      "TBD"
+      "Domain: Cybersecurity",
+      "Web Dev",
+      "Machine Learning | Front-End: React",
+      "Bootstrap",
+      "HTML",
+      "CSS",
+      "JavaScript | Back-End: Python",
+      "Flask Framework | Database: SQLite"
     ],
-    "status": "Not Started",
-    "progress": 0,
+    "status": "In Progress",
+    "progress": 10,
     "leader": "Sanket Wahane",
     "members": [
-      "Shubham Anand"
+      "Shubham Charpe",
+      "Anand Verma"
     ],
-    "mentor": "Priyanka Bhatele Mam",
+    "mentor": "Mr. Kaushal Verma",
     "repo": "#",
-    "liveLink": ""
+    "liveLink": "#"
   },
   {
     "id": "P-16",
-    "name": "Skin Disease Classification",
-    "desc": "Coming soon",
+    "name": "Skin Disease Detection System",
+    "desc": "An AI/ML-based web application that detects possible skin diseases from uploaded clinical images using deep learning convolutional neural networks.",
     "stack": [
-      "TBD"
+      "Domain: CSE-AIML",
+      "Web Development",
+      "Machine Learning | Front-End: React.js",
+      "HTML",
+      "CSS",
+      "JavaScript",
+      "Bootstrap | Back-End: Python",
+      "Flask Framework",
+      "TensorFlow | Database: MySQL"
     ],
-    "status": "Not Started",
-    "progress": 0,
-    "leader": "Manoj",
+    "status": "In Progress",
+    "progress": 10,
+    "leader": "Aryan Verma",
     "members": [
-      "Bhumika",
-      "Khushi",
-      "Aryan"
+      "Manoj Kushwah",
+      "Khushi Choudhary",
+      "Bhumika Kshirsagar"
     ],
-    "mentor": "Priyanka Bhatele Mam",
+    "mentor": "Ms. Mayuri Soni",
     "repo": "#",
-    "liveLink": ""
+    "liveLink": "#"
   },
   {
     "id": "P-17",
-    "name": "Bank ATM System C Face Recognition",
-    "desc": "Coming soon",
+    "name": "Air Quality Index Monitoring System",
+    "desc": "This project uses an ESP32 and MQ-7 sensor to detect carbon monoxide (CO) levels in the air and indicate pollution levels in real time.",
     "stack": [
-      "TBD"
+      "Domain: IoT",
+      "Machine Learning",
+      "Web Dev",
+      "Data Analytics | Front-End: HTML",
+      "CSS",
+      "JavaScript | Back-End: Python",
+      "Flask Framework",
+      "Django | Database: MySQL"
     ],
-    "status": "Not Started",
-    "progress": 0,
-    "leader": "Sujal",
+    "status": "In Progress",
+    "progress": 10,
+    "leader": "Abhishek Verma",
     "members": [
-      "Yuvraj",
-      "Shubham",
-      "Vishal Bilala"
+      "Sandhya Verma",
+      "Manish Sarkar"
     ],
-    "mentor": "Priyanka Bhatele Mam",
+    "mentor": "Mr. Anurag Chaturvedi",
     "repo": "#",
-    "liveLink": ""
+    "liveLink": "#"
   },
   {
     "id": "P-18",
     "name": "Fake News Detection",
-    "desc": "Coming soon",
+    "desc": "The Fake News Detection project is a machine learning application that identifies whether a news article or headline is Real or Fake.",
     "stack": [
-      "TBD"
+      "Domain: Web Development",
+      "Machine Learning | Front-End: HTML",
+      "CSS",
+      "JavaScript | Back-End: Python | Database: MySQL"
     ],
-    "status": "Not Started",
-    "progress": 0,
-    "leader": "Saurabh",
+    "status": "In Progress",
+    "progress": 10,
+    "leader": "Pankaj Wanode",
     "members": [
-      "Pankaj Wanode",
-      "Rakshit",
-      "Nitin"
+      "Rakshit Kshatriya",
+      "Nitin Kushwaha"
     ],
-    "mentor": "Priyanka Bhatele Mam",
+    "mentor": "Mr. Anurag Chaturvedi",
     "repo": "#",
-    "liveLink": ""
+    "liveLink": "#"
   },
   {
     "id": "P-19",
-    "name": "Air Quality Index",
-    "desc": "Coming soon",
+    "name": "Cyber Guard",
+    "desc": "Cyber Guard is a cybersecurity project designed to detect phishing links, suspicious URLs, and potential online threats.",
     "stack": [
-      "TBD"
+      "Domain: Web Development",
+      "Machine Learning",
+      "Data Analytics | Front-End: HTML",
+      "CSS",
+      "JS",
+      "React & Angular | Back-End: Python",
+      "Java",
+      "Flask Framework | Database: MySQL",
+      "MongoDB"
     ],
-    "status": "Not Started",
-    "progress": 0,
-    "leader": "Sandhya",
+    "status": "In Progress",
+    "progress": 10,
+    "leader": "Ankit Kumar Maurya",
     "members": [
-      "Abshiek",
-      "Ravikant",
-      "Manish"
+      "Jayesh Dafare",
+      "Masum Bisen",
+      "Amit Yadav"
     ],
-    "mentor": "Priyanka Bhatele Mam",
+    "mentor": "Mr. Nishikant Singh",
     "repo": "#",
-    "liveLink": ""
+    "liveLink": "#"
   },
   {
     "id": "P-20",
-    "name": "Vehicle Damage Project",
-    "desc": "Coming soon",
+    "name": "Vehicle Damage Analysis and Repair Cost using Deep Learning",
+    "desc": "Automated vehicle damage assessment and repair cost estimation using deep learning and computer vision.",
     "stack": [
-      "TBD"
+      "Domain: Machine Learning",
+      "Computer Vision | Front-End: HTML",
+      "CSS",
+      "JavaScript | Back-End: Python | Database: SQLite"
     ],
-    "status": "Not Started",
-    "progress": 0,
-    "leader": "Sanib",
+    "status": "In Progress",
+    "progress": 10,
+    "leader": "Sanib Raza",
     "members": [
-      "Rajat"
+      "Rajat Pakhale",
+      "Mihilal Patel",
+      "Alok Kumar Ojha"
     ],
-    "mentor": "Priyanka Bhatele Mam",
+    "mentor": "Mr. Nishikant Singh",
     "repo": "#",
-    "liveLink": ""
+    "liveLink": "#"
+  },
+  {
+    "id": "P-21",
+    "name": "Stock Price Prediction",
+    "desc": "A time-series forecasting model using LSTM neural networks and the yfinance API to predict future closing trends.",
+    "stack": [
+      "Domain: Machine Learning",
+      "Time-Series Forecasting",
+      "Data Analytics | Front-End: HTML",
+      "CSS",
+      "JavaScript | Back-End: Python (Flask)",
+      "TensorFlow | Database: PostgreSQL"
+    ],
+    "status": "In Progress",
+    "progress": 10,
+    "leader": "Dipendra Verma",
+    "members": [
+      "Mohit Ahirwar",
+      "Md. Nomaan",
+      "Laek Mansuri"
+    ],
+    "mentor": "Mr. Nishikant Singh",
+    "repo": "#",
+    "liveLink": "#"
   }
 ]

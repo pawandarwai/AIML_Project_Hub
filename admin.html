@@ -58,6 +58,12 @@ dialog::backdrop{background:rgba(10,18,28,.55)}
 .sync-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:8px}
 .progress-preview{height:6px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:4px}
 .progress-preview span{display:block;height:100%;border-radius:99px;background:var(--teal);transition:width .2s}
+.ppt-toggle{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;background:var(--bg);border:1px solid var(--line);cursor:pointer;margin-bottom:8px}
+.ppt-toggle input[type=checkbox]{width:16px;height:16px;cursor:pointer;accent-color:var(--teal)}
+.ppt-toggle label{cursor:pointer;font-size:14px;flex:1}
+.ppt-toggle .date{font:400 12px 'IBM Plex Mono',monospace;color:var(--soft)}
+.settings-card{background:var(--card);border:1px solid var(--gold);border-radius:14px;padding:20px;margin:16px 0}
+.settings-card h3{font:600 15px 'Space Grotesk',sans-serif;margin:0 0 14px;color:var(--gold)}
 @media(max-width:640px){.g2,.g3{grid-template-columns:1fr}.hide-m{display:none}}
 </style>
 </head>
@@ -118,6 +124,18 @@ dialog::backdrop{background:rgba(10,18,28,.55)}
         </div>
       </div>
       <div class="msg" id="appMsg"></div>
+
+      <!-- PPT Date Settings -->
+      <div class="settings-card">
+        <h3>⚙ Presentation Schedule (shown on site)</h3>
+        <div class="g3">
+          <div><label>PPT 1 Date</label><input id="s_ppt1" placeholder="Oct 27 – 29, 2026"></div>
+          <div><label>PPT 2 Date</label><input id="s_ppt2" placeholder="Nov 24 – 26, 2026"></div>
+          <div><label>PPT 3 Date</label><input id="s_ppt3" placeholder="Dec 14 – 16, 2026"></div>
+        </div>
+        <p style="margin:10px 0 0"><button class="btn" id="saveDates">Save dates (included in next Publish)</button></p>
+      </div>
+
       <div style="overflow-x:auto;margin-top:16px">
         <table>
           <thead>
@@ -187,6 +205,21 @@ dialog::backdrop{background:rgba(10,18,28,.55)}
 
     <div class="g2">
       <div>
+        <label>Project Guide</label>
+        <input id="f_guide" placeholder="Dr. Priyanka Bhatele">
+      </div>
+      <div></div>
+    </div>
+
+    <label>Presentation Status</label>
+    <div id="ppt_toggles">
+      <div class="ppt-toggle"><input type="checkbox" id="f_ppt1"><label for="f_ppt1">PPT 1 — Completed</label><span class="date" id="ppt1_date_lbl"></span></div>
+      <div class="ppt-toggle"><input type="checkbox" id="f_ppt2"><label for="f_ppt2">PPT 2 — Completed</label><span class="date" id="ppt2_date_lbl"></span></div>
+      <div class="ppt-toggle"><input type="checkbox" id="f_ppt3"><label for="f_ppt3">PPT 3 — Completed</label><span class="date" id="ppt3_date_lbl"></span></div>
+    </div>
+
+    <div class="g2">
+      <div>
         <label>GitHub Repository Link</label>
         <input id="f_repo" placeholder="https://github.com/…">
       </div>
@@ -207,7 +240,7 @@ dialog::backdrop{background:rgba(10,18,28,.55)}
 </dialog>
 
 <script>
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz8CUdFwg3lNr1ast4UMvyr7_NzDUA7OuQd5LHMRKQ7o8r1Z6PkxsZro7euptI4g4OTEg/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwnXUr5JPzPc6K7eJT9tE7OmK3rvpXt7od62Rlb02WyBlYgZJc129q4KQ5vy7xNkYV_LA/exec';
 const FILE = 'projects.json';
 
 const $ = id => document.getElementById(id);
@@ -241,6 +274,20 @@ const githubApi = (path, opt={}) => fetch(`https://api.github.com/repos/${cfg.ow
     $('remember').checked = !!localStorage.getItem('hub-admin');
   }
 })();
+
+// PPT dates (loaded from projects.json meta or defaults)
+let pptDates = {
+  ppt1: 'Oct 27 – 29, 2026',
+  ppt2: 'Nov 24 – 26, 2026',
+  ppt3: 'Dec 14 – 16, 2026'
+};
+
+function loadPptDates(){
+  ['ppt1','ppt2','ppt3'].forEach(k => {
+    const el = $('s_'+k);
+    if(el){ el.value = pptDates[k] || ''; }
+  });
+}
 
 // ── LOAD DATA ──
 // Step 1: get SHA from GitHub (required for publishing)
@@ -300,6 +347,9 @@ $('connect').onclick = async () => {
     if(source === 'sheet') say($('appMsg'),'ok','✓ Latest data loaded from Google Sheet.');
     else if(source === 'json') say($('appMsg'),'info','Sheet unavailable — data loaded from projects.json.');
     else say($('appMsg'),'info','No data found. Add projects and publish.');
+    // Load PPT dates from meta if saved
+    if(window._pptMeta) pptDates = window._pptMeta;
+    loadPptDates();
   }catch(e){ say($('loginMsg'),'err', e.message); }
 };
 
@@ -361,6 +411,15 @@ function openForm(i){
   $('f_leader').value         = p.leader   || '';
   $('f_mentor').value         = p.mentor   || 'Priyanka Bhatele Mam';
   $('f_members').value        = Array.isArray(p.members) ? p.members.join(', ') : (p.members || '');
+  $('f_guide').value          = p.guide    || '';
+  $('f_ppt1').checked         = p.ppt1_done === true || p.ppt1_done === 'TRUE';
+  $('f_ppt2').checked         = p.ppt2_done === true || p.ppt2_done === 'TRUE';
+  $('f_ppt3').checked         = p.ppt3_done === true || p.ppt3_done === 'TRUE';
+  // Show dates on toggles
+  ['ppt1','ppt2','ppt3'].forEach(k => {
+    const el = $(k+'_date_lbl');
+    if(el && pptDates[k]) el.textContent = pptDates[k];
+  });
   $('f_repo').value           = p.repo === '#' ? '' : (p.repo || '');
   $('f_live').value           = p.liveLink || '';
 
@@ -384,17 +443,21 @@ const csvList = s => s.split(',').map(x => x.trim()).filter(Boolean);
 
 $('form').addEventListener('submit', () => {
   const p = {
-    id:       $('f_id').value.trim(),
-    name:     $('f_name').value.trim(),
-    desc:     $('f_desc').value.trim() || 'Coming soon',
-    stack:    csvList($('f_stack').value),
-    status:   $('f_status').value,
-    progress: $('f_status').value === 'Completed' ? 100 : +$('f_progress').value,
-    leader:   $('f_leader').value.trim(),
-    mentor:   $('f_mentor').value.trim() || 'Priyanka Bhatele Mam',
-    members:  csvList($('f_members').value),
-    repo:     $('f_repo').value.trim() || '#',
-    liveLink: $('f_live').value.trim()
+    id:        $('f_id').value.trim(),
+    name:      $('f_name').value.trim(),
+    desc:      $('f_desc').value.trim() || 'Coming soon',
+    stack:     csvList($('f_stack').value),
+    status:    $('f_status').value,
+    progress:  $('f_status').value === 'Completed' ? 100 : +$('f_progress').value,
+    leader:    $('f_leader').value.trim(),
+    mentor:    $('f_mentor').value.trim() || 'Priyanka Bhatele Mam',
+    members:   csvList($('f_members').value),
+    guide:     $('f_guide').value.trim(),
+    ppt1_done: $('f_ppt1').checked,
+    ppt2_done: $('f_ppt2').checked,
+    ppt3_done: $('f_ppt3').checked,
+    repo:      $('f_repo').value.trim() || '#',
+    liveLink:  $('f_live').value.trim()
   };
 
   if(projects.some((x, i) => x.id === p.id && i !== editing)){
@@ -408,6 +471,16 @@ $('form').addEventListener('submit', () => {
   renderRows();
   setDirty(true);
 });
+
+// ── SAVE PPT DATES ──
+$('saveDates').onclick = () => {
+  ['ppt1','ppt2','ppt3'].forEach(k => {
+    const v = $('s_'+k).value.trim();
+    if(v) pptDates[k] = v;
+  });
+  say($('appMsg'),'ok','✓ Dates saved. They will be included in the next Publish.');
+  setDirty(true);
+};
 
 // ── PUBLISH (GitHub + Sheet) ──
 function showSync(ghOk, shOk){

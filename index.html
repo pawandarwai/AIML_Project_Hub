@@ -106,6 +106,28 @@ select{font:500 13px var(--body);padding:9px 12px;border:1px solid var(--line);b
 .link:hover{color:var(--gold)}
 .empty{display:none;text-align:center;padding:70px 20px;color:var(--soft)}
 .empty button{margin-top:12px;font:500 13px var(--body);padding:8px 16px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+.ppt-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
+.ppt-badge{font:500 11px var(--mono);padding:4px 9px;border-radius:6px;display:flex;align-items:center;gap:5px;white-space:nowrap}
+.ppt-badge.done{background:var(--done-bg);color:var(--done)}
+.ppt-badge.pending{background:var(--bg);color:var(--faint);border:1px solid var(--line)}
+.ppt-badge.upcoming{background:var(--prog-bg);color:var(--prog)}
+.ppt-section{margin-top:18px}
+.ppt-section .sec{margin-bottom:10px}
+.ppt-list{display:flex;flex-direction:column;gap:8px}
+.ppt-item{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:10px;background:var(--bg);border:1px solid var(--line)}
+.ppt-item.done{border-color:var(--done);background:var(--done-bg)}
+.ppt-item.upcoming{border-color:var(--gold);background:var(--prog-bg)}
+.ppt-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.ppt-dot.done{background:var(--done)}.ppt-dot.upcoming{background:var(--gold)}.ppt-dot.pending{background:var(--line)}
+.ppt-info{flex:1}
+.ppt-name{font:600 13px var(--display)}
+.ppt-date{font:400 12px var(--mono);color:var(--soft)}
+.ppt-status{font:600 11px var(--mono);margin-left:auto}
+.ppt-item.done .ppt-status{color:var(--done)}
+.ppt-item.upcoming .ppt-status{color:var(--prog)}
+.ppt-item.pending .ppt-status{color:var(--faint)}
+.guide-row{display:flex;align-items:center;gap:8px;margin-top:14px;padding:10px 14px;background:var(--bg);border-radius:10px;font-size:13px;color:var(--soft)}
+.guide-row strong{color:var(--ink)}
 
 /* MODAL */
 .overlay{position:fixed;inset:0;background:rgba(10,18,28,.6);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:24px;z-index:50}
@@ -234,6 +256,13 @@ footer .contact,footer .gmail{font-family:var(--mono);color:var(--gold)}
     <div class="stack" id="mStack"></div>
     <p class="sec">Team</p>
     <ul class="team" id="mTeam"></ul>
+    <div class="ppt-section">
+      <p class="sec">Presentations</p>
+      <div class="ppt-list" id="mPPT"></div>
+    </div>
+    <div class="guide-row" id="mGuideRow" style="display:none">
+      🎓 Project Guide: <strong id="mGuide"></strong>
+    </div>
     <div class="links">
       <a class="link" id="mRepo" target="_blank" rel="noopener">View repository →</a>
       <a class="link" id="mLive" target="_blank" rel="noopener">View live project →</a>
@@ -289,6 +318,13 @@ function render(){
       <p>${esc(p.desc)}</p>
       <div class="stack">${p.stack.map(t => `<span class="tag">${esc(t)}</span>`).join('')}</div>
       <div class="prog-row"><div class="bar"><span class="${cssClass(p.status)}" style="width:${p.progress}%"></span></div>${p.progress}%</div>
+      <div class="ppt-row">
+        ${['ppt1','ppt2','ppt3'].map(k => {
+          const st = pptState(p[k+'_done'], PPT_DATES[k].date);
+          const icon = st==='done'?'✓':st==='upcoming'?'→':'○';
+          return `<span class="ppt-badge ${st}">${icon} ${PPT_DATES[k].label}</span>`;
+        }).join('')}
+      </div>
       <div class="card-foot">
         <div class="row" style="gap:0">
           <div class="avatars">${team.slice(0,4).map(avatar).join('')}${team.length>4?`<span class="av more">+${team.length-4}</span>`:''}</div>
@@ -313,7 +349,7 @@ $('grid').addEventListener('keydown', e => {
 function openModal(id, from){
   const p = projects.find(x => x.id === id); if(!p) return;
   lastFocus = from;
-  $('modal').style.setProperty('--c', `var(--${p.status==='done'?'done':p.status==='progress'?'gold':'pend'})`);
+  $('modal').style.setProperty('--c', `var(--${p.status==='Completed'||p.status==='done'?'done':p.status==='In Progress'||p.status==='progress'?'gold':'pend'})`);
   $('mId').textContent = p.id;
   $('mTitle').textContent = p.name;
   $('mDesc').textContent = p.desc;
@@ -328,6 +364,19 @@ function openModal(id, from){
     `<li>${avatar(p.leader)}${esc(p.leader)}<span class="role">Leader</span></li>` +
     p.members.map(m => `<li>${avatar(m)}${esc(m)}<span class="role">Member</span></li>`).join('') +
     `<li>${avatar(p.mentor)}${esc(p.mentor)}<span class="role">Mentor</span></li>`;
+  // PPT presentations
+  $('mPPT').innerHTML = ['ppt1','ppt2','ppt3'].map(k => {
+    const st = pptState(p[k+'_done'], PPT_DATES[k].date);
+    const icon = st==='done'?'✓ Completed':st==='upcoming'?'→ Upcoming':'○ Not yet';
+    return `<div class="ppt-item ${st}">
+      <span class="ppt-dot ${st}"></span>
+      <div class="ppt-info"><div class="ppt-name">${PPT_DATES[k].label}</div><div class="ppt-date">${PPT_DATES[k].date}</div></div>
+      <span class="ppt-status">${icon}</span>
+    </div>`;
+  }).join('');
+  // Guide
+  if(p.guide){ $('mGuide').textContent = p.guide; $('mGuideRow').style.display='flex'; }
+  else $('mGuideRow').style.display='none';
   $('mRepo').href = p.repo;
   $('mLive').href = p.liveLink || '#';
   $('mLive').style.display = p.liveLink ? '' : 'none';
@@ -423,8 +472,21 @@ addEventListener('resize', resize);
 
 resize(); draw();
 
+// PPT presentation schedule (edit dates here or via admin page)
+const PPT_DATES = {
+  ppt1: { label:'PPT 1', date:'Oct 27 – 29, 2026' },
+  ppt2: { label:'PPT 2', date:'Nov 24 – 26, 2026' },
+  ppt3: { label:'PPT 3', date:'Dec 14 – 16, 2026' }
+};
+
+function pptState(done, date){
+  if(done === true || String(done).toLowerCase() === 'true') return 'done';
+  const today = new Date(); const d = new Date(date.split('–')[0].trim() + ' ' + new Date().getFullYear());
+  return today >= d ? 'upcoming' : 'pending';
+}
+
 // ── Data loading: Google Sheet CSV → projects.json fallback → inline fallback ──
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz8CUdFwg3lNr1ast4UMvyr7_NzDUA7OuQd5LHMRKQ7o8r1Z6PkxsZro7euptI4g4OTEg/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwnXUr5JPzPc6K7eJT9tE7OmK3rvpXt7od62Rlb02WyBlYgZJc129q4KQ5vy7xNkYV_LA/exec';
 
 // Step 1: Show projects.json immediately (fast, cached by GitHub CDN)
 // Step 2: Silently refresh from Sheet in background — update UI if data changed

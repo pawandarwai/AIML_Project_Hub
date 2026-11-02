@@ -14,18 +14,18 @@
     "status": "In Progress",
     "progress": 40,
     "leader": "Pawan Darwai",
-    "mentor": "Dr. Priyanka Bhatele",
     "members": [
       "Anurag Malviya",
       "Harsh Charpe",
       "Raj Bisen"
     ],
-    "guide": "",
+    "mentor": "Dr. Priyanka Bhatele",
+    "repo": "#",
+    "liveLink": "#",
     "ppt1_done": true,
     "ppt2_done": false,
     "ppt3_done": false,
-    "repo": "#",
-    "liveLink": "#"
+    "guide": ""
   },
   {
     "id": "P-02",

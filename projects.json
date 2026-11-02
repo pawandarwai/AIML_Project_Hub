@@ -374,20 +374,20 @@
       "Flask Framework | Database: SQLite"
     ],
     "status": "In Progress",
-    "progress": 10,
+    "progress": 20,
     "leader": "Mahi",
+    "mentor": "Mr. Kaushal Verma",
     "members": [
       "Archi",
       "Harshika",
       "Shivam"
     ],
-    "mentor": "Mr. Kaushal Verma",
-    "repo": "#",
-    "liveLink": "#",
-    "ppt1_done": false,
+    "guide": "",
+    "ppt1_done": true,
     "ppt2_done": false,
     "ppt3_done": false,
-    "guide": ""
+    "repo": "#",
+    "liveLink": "#"
   },
   {
     "id": "P-15",

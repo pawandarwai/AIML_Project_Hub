@@ -12,20 +12,20 @@
       "Flask Framework | Database: MongoDB"
     ],
     "status": "In Progress",
-    "progress": 40,
+    "progress": 50,
     "leader": "Pawan Darwai",
+    "mentor": "Dr. Priyanka Bhatele",
     "members": [
       "Anurag Malviya",
       "Harsh Charpe",
       "Raj Bisen"
     ],
-    "mentor": "Dr. Priyanka Bhatele",
-    "repo": "#",
-    "liveLink": "#",
+    "guide": "",
     "ppt1_done": true,
     "ppt2_done": false,
     "ppt3_done": false,
-    "guide": ""
+    "repo": "#",
+    "liveLink": "#"
   },
   {
     "id": "P-02",
@@ -153,19 +153,19 @@
     "status": "In Progress",
     "progress": 20,
     "leader": "Sujal Rathore",
-    "mentor": "Dr. Vandana Rai",
     "members": [
       "Yuvraj Rajput",
       "Shubham Hanowad",
       "Vishal Bhilala",
       "Shivam Tiwari"
     ],
-    "guide": "",
+    "mentor": "Dr. Vandana Rai",
+    "repo": "#",
+    "liveLink": "#",
     "ppt1_done": true,
     "ppt2_done": false,
     "ppt3_done": false,
-    "repo": "#",
-    "liveLink": "#"
+    "guide": ""
   },
   {
     "id": "P-07",

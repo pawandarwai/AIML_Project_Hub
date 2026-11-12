@@ -14,18 +14,18 @@
     "status": "In Progress",
     "progress": 50,
     "leader": "Pawan Darwai",
-    "mentor": "Dr. Priyanka Bhatele",
     "members": [
       "Anurag Malviya",
       "Harsh Charpe",
       "Raj Bisen"
     ],
-    "guide": "",
+    "mentor": "Dr. Priyanka Bhatele",
+    "repo": "#",
+    "liveLink": "#",
     "ppt1_done": true,
     "ppt2_done": false,
     "ppt3_done": false,
-    "repo": "#",
-    "liveLink": "#"
+    "guide": ""
   },
   {
     "id": "P-02",
@@ -46,7 +46,7 @@
     "mentor": "Dr. Priyanka Bhatele",
     "repo": "#",
     "liveLink": "#",
-    "ppt1_done": true,
+    "ppt1_done": false,
     "ppt2_done": false,
     "ppt3_done": false,
     "guide": ""
@@ -96,18 +96,18 @@
     "status": "In Progress",
     "progress": 10,
     "leader": "Riya Nahar",
+    "mentor": "Dr. Vandana Rai",
     "members": [
       "Shakhi Dharsey",
       "Swati Parte",
       "Nandini Atarkar"
     ],
-    "mentor": "Dr. Vandana Rai",
-    "repo": "#",
-    "liveLink": "#",
-    "ppt1_done": false,
+    "guide": "",
+    "ppt1_done": true,
     "ppt2_done": false,
     "ppt3_done": false,
-    "guide": ""
+    "repo": "#",
+    "liveLink": "#"
   },
   {
     "id": "P-05",

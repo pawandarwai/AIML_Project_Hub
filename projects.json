@@ -96,18 +96,18 @@
     "status": "In Progress",
     "progress": 10,
     "leader": "Riya Nahar",
-    "mentor": "Dr. Vandana Rai",
     "members": [
       "Shakhi Dharsey",
       "Swati Parte",
       "Nandini Atarkar"
     ],
-    "guide": "",
+    "mentor": "Dr. Vandana Rai",
+    "repo": "#",
+    "liveLink": "#",
     "ppt1_done": true,
     "ppt2_done": false,
     "ppt3_done": false,
-    "repo": "#",
-    "liveLink": "#"
+    "guide": ""
   },
   {
     "id": "P-05",
@@ -125,18 +125,18 @@
     "status": "In Progress",
     "progress": 10,
     "leader": "Vishal Fulbandhe",
+    "mentor": "Dr. Vandana Rai",
     "members": [
       "Sarvesh Verma",
       "Vishal Kadwe",
       "Bhanu Pratap"
     ],
-    "mentor": "Dr. Vandana Rai",
-    "repo": "#",
-    "liveLink": "#",
-    "ppt1_done": false,
+    "guide": "",
+    "ppt1_done": true,
     "ppt2_done": false,
     "ppt3_done": false,
-    "guide": ""
+    "repo": "#",
+    "liveLink": "#"
   },
   {
     "id": "P-06",

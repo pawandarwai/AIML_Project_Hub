@@ -180,17 +180,17 @@
     "status": "In Progress",
     "progress": 10,
     "leader": "Ashutosh Pawsai",
-    "mentor": "Mr. Kaushal Verma",
     "members": [
       "Divya Nartekar",
       "Vaishali Chachane"
     ],
-    "guide": "",
+    "mentor": "Mr. Kaushal Verma",
+    "repo": "#",
+    "liveLink": "#",
     "ppt1_done": true,
     "ppt2_done": false,
     "ppt3_done": false,
-    "repo": "#",
-    "liveLink": "#"
+    "guide": ""
   },
   {
     "id": "P-08",
@@ -205,18 +205,18 @@
     "status": "In Progress",
     "progress": 10,
     "leader": "Shivani Singh",
+    "mentor": "Ms. Mayuri Soni",
     "members": [
       "Suhani Mewada",
       "Aastha Singh",
       "Akanksha Singh"
     ],
-    "mentor": "Ms. Mayuri Soni",
-    "repo": "#",
-    "liveLink": "#",
-    "ppt1_done": false,
+    "guide": "",
+    "ppt1_done": true,
     "ppt2_done": false,
     "ppt3_done": false,
-    "guide": ""
+    "repo": "#",
+    "liveLink": "#"
   },
   {
     "id": "P-09",

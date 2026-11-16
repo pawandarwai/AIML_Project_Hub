@@ -233,17 +233,17 @@
     "status": "In Progress",
     "progress": 10,
     "leader": "Nikhil Sonwane",
+    "mentor": "Ms. Khushboo Bharadwaj",
     "members": [
       "Vaishali Chachane",
       "Divya Nartekar"
     ],
-    "mentor": "Ms. Khushboo Bharadwaj",
-    "repo": "#",
-    "liveLink": "#",
-    "ppt1_done": false,
+    "guide": "",
+    "ppt1_done": true,
     "ppt2_done": false,
     "ppt3_done": false,
-    "guide": ""
+    "repo": "#",
+    "liveLink": "#"
   },
   {
     "id": "P-10",

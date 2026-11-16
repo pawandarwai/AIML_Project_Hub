@@ -14,18 +14,18 @@
     "status": "In Progress",
     "progress": 50,
     "leader": "Pawan Darwai",
-    "mentor": "Dr. Priyanka Bhatele",
     "members": [
       "Anurag Malviya",
       "Harsh Charpe",
       "Raj Bisen"
     ],
-    "guide": "",
+    "mentor": "Dr. Priyanka Bhatele",
+    "repo": "#",
+    "liveLink": "#",
     "ppt1_done": true,
     "ppt2_done": false,
     "ppt3_done": false,
-    "repo": "#",
-    "liveLink": "#"
+    "guide": ""
   },
   {
     "id": "P-02",
@@ -46,7 +46,7 @@
     "mentor": "Dr. Priyanka Bhatele",
     "repo": "#",
     "liveLink": "#",
-    "ppt1_done": true,
+    "ppt1_done": false,
     "ppt2_done": false,
     "ppt3_done": false,
     "guide": ""
@@ -104,7 +104,7 @@
     "mentor": "Dr. Vandana Rai",
     "repo": "#",
     "liveLink": "#",
-    "ppt1_done": false,
+    "ppt1_done": true,
     "ppt2_done": false,
     "ppt3_done": false,
     "guide": ""
@@ -133,7 +133,7 @@
     "mentor": "Dr. Vandana Rai",
     "repo": "#",
     "liveLink": "#",
-    "ppt1_done": false,
+    "ppt1_done": true,
     "ppt2_done": false,
     "ppt3_done": false,
     "guide": ""
@@ -187,7 +187,7 @@
     "mentor": "Mr. Kaushal Verma",
     "repo": "#",
     "liveLink": "#",
-    "ppt1_done": false,
+    "ppt1_done": true,
     "ppt2_done": false,
     "ppt3_done": false,
     "guide": ""
@@ -213,7 +213,7 @@
     "mentor": "Ms. Mayuri Soni",
     "repo": "#",
     "liveLink": "#",
-    "ppt1_done": false,
+    "ppt1_done": true,
     "ppt2_done": false,
     "ppt3_done": false,
     "guide": ""
@@ -233,17 +233,23 @@
     "status": "In Progress",
     "progress": 10,
     "leader": "Nikhil Sonwane",
+    "mentor": "Ms. Khushboo Bharadwaj",
     "members": [
       "Vaishali Chachane",
       "Divya Nartekar"
     ],
+<<<<<<< HEAD
     "mentor": "Ms. Khushboo Bharadwaj",
     "repo": "#",
     "liveLink": "#",
+=======
+    "guide": "",
+>>>>>>> 0a48cb2f1db28c69c447e1a7000782a8cfe31bb2
     "ppt1_done": true,
     "ppt2_done": false,
     "ppt3_done": false,
-    "guide": ""
+    "repo": "#",
+    "liveLink": "#"
   },
   {
     "id": "P-10",

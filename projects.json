@@ -466,17 +466,17 @@
     "status": "In Progress",
     "progress": 10,
     "leader": "Abhishek Verma",
+    "mentor": "Mr. Anurag Chaturvedi",
     "members": [
       "Sandhya Verma",
       "Manish Sarkar"
     ],
-    "mentor": "Mr. Anurag Chaturvedi",
-    "repo": "#",
-    "liveLink": "#",
-    "ppt1_done": false,
+    "guide": "",
+    "ppt1_done": true,
     "ppt2_done": false,
     "ppt3_done": false,
-    "guide": ""
+    "repo": "#",
+    "liveLink": "#"
   },
   {
     "id": "P-18",

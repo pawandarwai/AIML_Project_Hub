@@ -36,20 +36,20 @@
       "Deep Learning (CNN) | Front-End: N/A | Back-End: Python | Database: N/A"
     ],
     "status": "In Progress",
-    "progress": 25,
+    "progress": 45,
     "leader": "Eshan Shrivastava",
+    "mentor": "Dr. Priyanka Bhatele",
     "members": [
       "Anjali Hada",
       "Diksha Gaur",
       "Chanchal Garhwal"
     ],
-    "mentor": "Dr. Priyanka Bhatele",
-    "repo": "#",
-    "liveLink": "#",
+    "guide": "",
     "ppt1_done": true,
     "ppt2_done": true,
     "ppt3_done": false,
-    "guide": ""
+    "repo": "#",
+    "liveLink": "#"
   },
   {
     "id": "P-03",
@@ -125,18 +125,18 @@
     "status": "In Progress",
     "progress": 10,
     "leader": "Vishal Fulbandhe",
-    "mentor": "Dr. Vandana Rai",
     "members": [
       "Sarvesh Verma",
       "Vishal Kadwe",
       "Bhanu Pratap"
     ],
-    "guide": "",
+    "mentor": "Dr. Vandana Rai",
+    "repo": "#",
+    "liveLink": "#",
     "ppt1_done": true,
     "ppt2_done": false,
     "ppt3_done": false,
-    "repo": "#",
-    "liveLink": "#"
+    "guide": ""
   },
   {
     "id": "P-06",
@@ -153,19 +153,19 @@
     "status": "In Progress",
     "progress": 20,
     "leader": "Sujal Rathore",
-    "mentor": "Dr. Vandana Rai",
     "members": [
       "Yuvraj Rajput",
       "Shubham Hanowad",
       "Vishal Bhilala",
       "Shivam Tiwari"
     ],
-    "guide": "",
+    "mentor": "Dr. Vandana Rai",
+    "repo": "#",
+    "liveLink": "#",
     "ppt1_done": true,
     "ppt2_done": false,
     "ppt3_done": false,
-    "repo": "#",
-    "liveLink": "#"
+    "guide": ""
   },
   {
     "id": "P-07",
@@ -180,17 +180,17 @@
     "status": "In Progress",
     "progress": 10,
     "leader": "Ashutosh Pawsai",
-    "mentor": "Mr. Kaushal Verma",
     "members": [
       "Divya Nartekar",
       "Vaishali Chachane"
     ],
-    "guide": "",
+    "mentor": "Mr. Kaushal Verma",
+    "repo": "#",
+    "liveLink": "#",
     "ppt1_done": true,
     "ppt2_done": false,
     "ppt3_done": false,
-    "repo": "#",
-    "liveLink": "#"
+    "guide": ""
   },
   {
     "id": "P-08",
@@ -263,18 +263,18 @@
     "status": "In Progress",
     "progress": 10,
     "leader": "Ansh Malviya",
-    "mentor": "Ms. Khushboo Bharadwaj",
     "members": [
       "Atul Singh",
       "Ashutosh Kumar",
       "Deepesh Prajapat"
     ],
-    "guide": "",
+    "mentor": "Ms. Khushboo Bharadwaj",
+    "repo": "#",
+    "liveLink": "#",
     "ppt1_done": true,
     "ppt2_done": false,
     "ppt3_done": false,
-    "repo": "#",
-    "liveLink": "#"
+    "guide": ""
   },
   {
     "id": "P-11",
@@ -291,18 +291,18 @@
     "status": "In Progress",
     "progress": 10,
     "leader": "Divyansh Kelodiya",
-    "mentor": "Ms. Priyanka Saxena",
     "members": [
       "Shivang Maheshwari",
       "Amit Nagar",
       "Chaitanya Dangoliya"
     ],
-    "guide": "",
+    "mentor": "Ms. Priyanka Saxena",
+    "repo": "#",
+    "liveLink": "#",
     "ppt1_done": true,
     "ppt2_done": false,
     "ppt3_done": false,
-    "repo": "#",
-    "liveLink": "#"
+    "guide": ""
   },
   {
     "id": "P-12",
@@ -319,17 +319,17 @@
     "status": "In Progress",
     "progress": 10,
     "leader": "Dev Vrat Payasi",
-    "mentor": "Ms. Priyanka Saxena",
     "members": [
       "Chetan Charpe",
       "Somdeep Kumar Ahirwar"
     ],
-    "guide": "",
+    "mentor": "Ms. Priyanka Saxena",
+    "repo": "#",
+    "liveLink": "#",
     "ppt1_done": true,
     "ppt2_done": false,
     "ppt3_done": false,
-    "repo": "#",
-    "liveLink": "#"
+    "guide": ""
   },
   {
     "id": "P-13",
@@ -347,18 +347,18 @@
     "status": "In Progress",
     "progress": 10,
     "leader": "Sapna Sambare",
-    "mentor": "Ms. Priyanka Saxena",
     "members": [
       "Sheetal Tilak",
       "Vaishnavi Gurde",
       "Shraddha Tilak"
     ],
-    "guide": "",
+    "mentor": "Ms. Priyanka Saxena",
+    "repo": "#",
+    "liveLink": "#",
     "ppt1_done": true,
     "ppt2_done": false,
     "ppt3_done": false,
-    "repo": "#",
-    "liveLink": "#"
+    "guide": ""
   },
   {
     "id": "P-14",
@@ -406,17 +406,17 @@
     "status": "In Progress",
     "progress": 10,
     "leader": "Sanket Wahane",
-    "mentor": "Mr. Kaushal Verma",
     "members": [
       "Shubham Charpe",
       "Anand Verma"
     ],
-    "guide": "",
+    "mentor": "Mr. Kaushal Verma",
+    "repo": "#",
+    "liveLink": "#",
     "ppt1_done": true,
     "ppt2_done": false,
     "ppt3_done": false,
-    "repo": "#",
-    "liveLink": "#"
+    "guide": ""
   },
   {
     "id": "P-16",
@@ -436,18 +436,18 @@
     "status": "In Progress",
     "progress": 10,
     "leader": "Aryan Verma",
-    "mentor": "Ms. Mayuri Soni",
     "members": [
       "Manoj Kushwah",
       "Khushi Choudhary",
       "Bhumika Kshirsagar"
     ],
-    "guide": "",
+    "mentor": "Ms. Mayuri Soni",
+    "repo": "#",
+    "liveLink": "#",
     "ppt1_done": true,
     "ppt2_done": false,
     "ppt3_done": false,
-    "repo": "#",
-    "liveLink": "#"
+    "guide": ""
   },
   {
     "id": "P-17",
@@ -491,17 +491,17 @@
     "status": "In Progress",
     "progress": 10,
     "leader": "Pankaj Wanode",
-    "mentor": "Mr. Anurag Chaturvedi",
     "members": [
       "Rakshit Kshatriya",
       "Nitin Kushwaha"
     ],
-    "guide": "",
+    "mentor": "Mr. Anurag Chaturvedi",
+    "repo": "#",
+    "liveLink": "#",
     "ppt1_done": true,
     "ppt2_done": false,
     "ppt3_done": false,
-    "repo": "#",
-    "liveLink": "#"
+    "guide": ""
   },
   {
     "id": "P-19",
